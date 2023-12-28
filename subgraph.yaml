@@ -30,3 +30,96 @@ dataSources:
         - event: ItemBought(indexed address,indexed uint256,address,uint256)
           handler: handleItemBought
       file: ./src/game-marketplace.ts
+  - kind: ethereum
+    name: DungeonAdventure
+    network: mumbai
+    source:
+      address: "0xBe02808F1D40A2fa87Fbe8405818b63fD2d0A02E"
+      abi: DungeonAdventure
+      startBlock: 43757245
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - DungeonResult
+      abis:
+        - name: DungeonAdventure
+          file: ./abis/DungeonAdventure.json
+      eventHandlers:
+        - event: DungeonResult(indexed address,uint256,bool,string,uint256,uint256,uint256[])
+          handler: handleDungeonResult
+      file: ./src/dungeon-adventure.ts
+  - kind: ethereum
+    name: CreateCharacter
+    network: mumbai
+    source:
+      address: "0x8ae6b96bb0096De4f65BdB8045242329a67485D4"
+      abi: CreateCharacter
+      startBlock: 43762903
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Character
+        - ExperienceUpdate
+      abis:
+        - name: CreateCharacter
+          file: ./abis/CreateCharacter.json
+      eventHandlers:
+        - event: CharacterMinted(indexed address,uint256,string,string,uint256)
+          handler: handleCharacterMinted
+        - event: ExperienceUpdated(uint256,uint256)
+          handler: handleExperienceUpdated
+        - event: ExperienceUpdatedWithSlot(uint256,uint256,uint256)
+          handler: handleExperienceUpdatedWithSlot
+      file: ./src/create-character.ts
+  - kind: ethereum
+    name: MintItem
+    network: mumbai
+    source:
+      address: "0xFEcfd592963095d33A840AfAE11a20B929bb7cAD"
+      abi: MintItem
+      startBlock: 44000838
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Item
+        - CharacterOwnerChange
+      abis:
+        - name: MintItem
+          file: ./abis/MintItem.json
+      eventHandlers:
+        - event: CharacterOwnerChanged(indexed uint256,indexed address)
+          handler: handleCharacterOwnerChanged
+      file: ./src/mint-item.ts
+  - kind: ethereum
+    name: MintBox
+    network: mumbai
+    source:
+      address: "0x7723157B4123bEA28756560aE13dDAe2f1A52F59" # Replace with the actual contract address
+      abi: MintBox
+      startBlock: 43766760
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - Box
+        - Item
+      abis:
+        - name: MintBox
+          file: ./abis/MintBox.json
+      eventHandlers:
+        - event: BoxMinted(indexed address,uint256,string,string)
+          handler: handleBoxMinted
+        - event: ItemMinted(indexed address,uint256,string)
+          handler: handleItemMinted
+      file: ./src/mint-box.ts
+
+
+
+

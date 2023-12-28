@@ -43,3 +43,61 @@ type ItemBought @entity {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
 }
+
+type DungeonResult @entity {
+  id: ID!
+  player: Bytes! # Ethereum address
+  characterId: BigInt!
+  success: Boolean!
+  message: String
+  winChance: BigInt!
+  randomValue: BigInt!
+  burnedItems: [BigInt!]!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+}
+
+type Character @entity {
+  id: ID!
+  user: Bytes!
+  tokenId: BigInt!
+  name: String!
+  imageURI: String!
+  itemSlots: BigInt!
+  experience: BigInt!
+  openSlots: [BigInt!]
+}
+
+type ExperienceUpdate @entity {
+  id: ID!
+  tokenId: BigInt!
+  totalExperience: BigInt!
+  # For ExperienceUpdatedWithSlot event
+  lastAddedSlot: BigInt
+}
+
+type ItemOwnershipChange @entity {
+  id: ID!
+  tokenId: BigInt!
+  newOwner: Bytes!
+  # Additional fields as needed
+}
+
+type Box @entity {
+  id: ID!
+  user: Bytes!
+  tokenId: BigInt!
+  name: String!
+  itemType: String!
+  # Additional fields as needed
+}
+
+type Item @entity {
+  id: ID!
+  user: Bytes!
+  tokenId: BigInt!
+  metadata: String!
+  # Additional fields as needed
+}
+
+

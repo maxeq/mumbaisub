@@ -3,6 +3,19 @@
     "GameMarketplace": {
       "address": "0x932A5Fa6EB8a3BD5A43F5866AbAc30e498197785",
       "startBlock": 44088352
+    },
+    "DungeonAdventure": {
+      "address": "0xBe02808F1D40A2fa87Fbe8405818b63fD2d0A02E"
+    },
+    "MintItem": {
+      "address": "0xFEcfd592963095d33A840AfAE11a20B929bb7cAD"
+    },
+    "MintBox": {
+      "address": "0x7723157B4123bEA28756560aE13dDAe2f1A52F59"
+    },
+    "CreateCharacter": {
+      "address": "0x8ae6b96bb0096De4f65BdB8045242329a67485D4",
+      "startBlock": 43762903
     }
   }
 }
