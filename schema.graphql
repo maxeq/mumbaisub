@@ -5,3 +5,41 @@ type Upgraded @entity(immutable: true) {
   blockTimestamp: BigInt!
   transactionHash: Bytes!
 }
+
+type ItemListed @entity {
+  id: ID!
+  nftAddress: Bytes! # Address of the NFT
+  tokenId: BigInt! # Token ID of the NFT
+  seller: Bytes! # Address of the seller
+  price: BigInt! # Price of the listing
+  itemTokenIds: [BigInt!]! # Array of item token IDs
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+}
+
+type ListingCancelled @entity {
+  id: ID!
+  nftAddress: Bytes! # Address of the NFT
+  tokenId: BigInt! # Token ID of the NFT
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+}
+
+type PriceChanged @entity {
+  id: ID!
+  nftAddress: Bytes! # Address of the NFT
+  tokenId: BigInt! # Token ID of the NFT
+  newPrice: BigInt! # New price after the change
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+}
+
+type ItemBought @entity {
+  id: ID!
+  nftAddress: Bytes! # Address of the NFT
+  tokenId: BigInt! # Token ID of the NFT
+  buyer: Bytes! # Address of the buyer
+  price: BigInt! # Price at which the item was bought
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+}
