@@ -1,4 +1,4 @@
-import { BoxMinted as BoxMintedEvent, ItemMinted as ItemMintedEvent, ItemsProcessed as ItemsProcessedEvent } from "../generated/MintBox/MintBox";
+import { BoxMinted as BoxMintedEvent, ItemsProcessed as ItemsProcessedEvent } from "../generated/MintBox/MintBox";
 import { Box, Item } from "../generated/schema";
 
 export function handleBoxMinted(event: BoxMintedEvent): void {
@@ -11,12 +11,21 @@ export function handleBoxMinted(event: BoxMintedEvent): void {
   entity.save();
 }
 
-export function handleItemMinted(event: ItemMintedEvent): void {
-  let id = event.params.itemId.toString();
-  let entity = new Item(id);
-  entity.user = event.params.user;
-  entity.tokenId = event.params.itemId;
-  entity.metadata = event.params.metadata;
-  entity.save();
-}
+export function handleItemsProcessed(event: ItemsProcessedEvent): void {
+  let itemIds = event.params.itemIds;
+  let uris = event.params.uris;
 
+  for (let i = 0; i < itemIds.length; i++) {
+    let itemId = itemIds[i].toString();
+    let item = Item.load(itemId);
+    if (!item) {
+      item = new Item(itemId);
+    }
+
+    item.user = event.params.user;
+    item.tokenId = itemIds[i];
+    item.metadata = uris[i];
+
+    item.save();
+  }
+}

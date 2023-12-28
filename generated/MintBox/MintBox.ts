@@ -132,32 +132,6 @@ export class Initialized__Params {
   }
 }
 
-export class ItemMinted extends ethereum.Event {
-  get params(): ItemMinted__Params {
-    return new ItemMinted__Params(this);
-  }
-}
-
-export class ItemMinted__Params {
-  _event: ItemMinted;
-
-  constructor(event: ItemMinted) {
-    this._event = event;
-  }
-
-  get user(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get itemId(): BigInt {
-    return this._event.parameters[1].value.toBigInt();
-  }
-
-  get metadata(): string {
-    return this._event.parameters[2].value.toString();
-  }
-}
-
 export class ItemsProcessed extends ethereum.Event {
   get params(): ItemsProcessed__Params {
     return new ItemsProcessed__Params(this);
@@ -1105,50 +1079,20 @@ export class MintMultipleBoxesCall__Outputs {
   }
 }
 
-export class OpenBoxCall extends ethereum.Call {
-  get inputs(): OpenBoxCall__Inputs {
-    return new OpenBoxCall__Inputs(this);
+export class OpenBoxesCall extends ethereum.Call {
+  get inputs(): OpenBoxesCall__Inputs {
+    return new OpenBoxesCall__Inputs(this);
   }
 
-  get outputs(): OpenBoxCall__Outputs {
-    return new OpenBoxCall__Outputs(this);
-  }
-}
-
-export class OpenBoxCall__Inputs {
-  _call: OpenBoxCall;
-
-  constructor(call: OpenBoxCall) {
-    this._call = call;
-  }
-
-  get boxId(): BigInt {
-    return this._call.inputValues[0].value.toBigInt();
+  get outputs(): OpenBoxesCall__Outputs {
+    return new OpenBoxesCall__Outputs(this);
   }
 }
 
-export class OpenBoxCall__Outputs {
-  _call: OpenBoxCall;
+export class OpenBoxesCall__Inputs {
+  _call: OpenBoxesCall;
 
-  constructor(call: OpenBoxCall) {
-    this._call = call;
-  }
-}
-
-export class OpenMultipleBoxesCall extends ethereum.Call {
-  get inputs(): OpenMultipleBoxesCall__Inputs {
-    return new OpenMultipleBoxesCall__Inputs(this);
-  }
-
-  get outputs(): OpenMultipleBoxesCall__Outputs {
-    return new OpenMultipleBoxesCall__Outputs(this);
-  }
-}
-
-export class OpenMultipleBoxesCall__Inputs {
-  _call: OpenMultipleBoxesCall;
-
-  constructor(call: OpenMultipleBoxesCall) {
+  constructor(call: OpenBoxesCall) {
     this._call = call;
   }
 
@@ -1157,10 +1101,10 @@ export class OpenMultipleBoxesCall__Inputs {
   }
 }
 
-export class OpenMultipleBoxesCall__Outputs {
-  _call: OpenMultipleBoxesCall;
+export class OpenBoxesCall__Outputs {
+  _call: OpenBoxesCall;
 
-  constructor(call: OpenMultipleBoxesCall) {
+  constructor(call: OpenBoxesCall) {
     this._call = call;
   }
 }
