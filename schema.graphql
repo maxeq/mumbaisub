@@ -13,6 +13,10 @@ type ItemListed @entity {
   seller: Bytes! # Address of the seller
   price: BigInt! # Price of the listing
   itemTokenIds: [BigInt!]! # Array of item token IDs
+  itemType: String! # Type of the item
+  power: Int! # Power of the item
+  durability: Int! # Durability of the item
+  characterOwner: String! # Character owner of the item
   blockNumber: BigInt!
   blockTimestamp: BigInt!
 }
@@ -40,6 +44,10 @@ type ItemBought @entity {
   tokenId: BigInt! # Token ID of the NFT
   buyer: Bytes! # Address of the buyer
   price: BigInt! # Price at which the item was bought
+  itemType: String! # Type of the item
+  power: Int! # Power of the item
+  durability: Int! # Durability of the item
+  characterOwner: String! # Character owner of the item
   blockNumber: BigInt!
   blockTimestamp: BigInt!
 }

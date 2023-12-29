@@ -18,15 +18,25 @@ export function handleUpgraded(event: UpgradedEvent): void {
 export function handleItemListed(event: ItemListedEvent): void {
   let id = event.params.nftAddress.toHexString() + '-' + event.params.tokenId.toString();
   let entity = new ItemListed(id);
+
   entity.nftAddress = event.params.nftAddress;
   entity.tokenId = event.params.tokenId;
   entity.seller = event.params.seller;
   entity.price = event.params.price;
   entity.itemTokenIds = event.params.itemTokenIds;
+
+  // Add these new fields
+  entity.itemType = event.params.itemType;
+  entity.power = event.params.power;
+  entity.durability = event.params.durability;
+  entity.characterOwner = event.params.characterOwner;
+
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
+  
   entity.save();
 }
+
 
 
 export function handleListingCancelled(event: ListingCancelledEvent): void {
@@ -55,12 +65,20 @@ export function handlePriceChanged(event: PriceChangedEvent): void {
 export function handleItemBought(event: ItemBoughtEvent): void {
   let id = event.params.nftAddress.toHexString() + '-' + event.params.tokenId.toString();
   let entity = new ItemBought(id);
+
   entity.nftAddress = event.params.nftAddress;
   entity.tokenId = event.params.tokenId;
   entity.buyer = event.params.buyer;
   entity.price = event.params.price;
+
+  // Add these new fields if they exist in the event
+  entity.itemType = event.params.itemType;
+  entity.power = event.params.power;
+  entity.durability = event.params.durability;
+  entity.characterOwner = event.params.characterOwner;
+
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
+  
   entity.save();
 }
-

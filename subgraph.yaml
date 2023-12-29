@@ -6,7 +6,7 @@ dataSources:
     name: GameMarketplace
     network: mumbai
     source:
-      address: "0x932A5Fa6EB8a3BD5A43F5866AbAc30e498197785"
+      address: "0x243C304CEc9A299A592D02fd86cF980062cfc687"
       abi: GameMarketplace
       startBlock: 44088352
     mapping:
@@ -21,13 +21,13 @@ dataSources:
       eventHandlers:
         - event: Upgraded(indexed address)
           handler: handleUpgraded
-        - event: ItemListed(indexed address,indexed uint256,address,uint256,uint256[])
+        - event: ItemListed(indexed address,indexed uint256,address,uint256,uint256[],string,uint16,uint8,string)
           handler: handleItemListed
         - event: ListingCancelled(indexed address,indexed uint256)
           handler: handleListingCancelled
         - event: PriceChanged(indexed address,indexed uint256,uint256)
           handler: handlePriceChanged
-        - event: ItemBought(indexed address,indexed uint256,address,uint256)
+        - event: ItemBought(indexed address,indexed uint256,address,uint256,uint256[],string,uint16,uint8,string)
           handler: handleItemBought
       file: ./src/game-marketplace.ts
   - kind: ethereum

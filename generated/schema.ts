@@ -209,6 +209,58 @@ export class ItemListed extends Entity {
     this.set("itemTokenIds", Value.fromBigIntArray(value));
   }
 
+  get itemType(): string {
+    let value = this.get("itemType");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set itemType(value: string) {
+    this.set("itemType", Value.fromString(value));
+  }
+
+  get power(): i32 {
+    let value = this.get("power");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set power(value: i32) {
+    this.set("power", Value.fromI32(value));
+  }
+
+  get durability(): i32 {
+    let value = this.get("durability");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set durability(value: i32) {
+    this.set("durability", Value.fromI32(value));
+  }
+
+  get characterOwner(): string {
+    let value = this.get("characterOwner");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set characterOwner(value: string) {
+    this.set("characterOwner", Value.fromString(value));
+  }
+
   get blockNumber(): BigInt {
     let value = this.get("blockNumber");
     if (!value || value.kind == ValueKind.NULL) {
@@ -528,6 +580,58 @@ export class ItemBought extends Entity {
 
   set price(value: BigInt) {
     this.set("price", Value.fromBigInt(value));
+  }
+
+  get itemType(): string {
+    let value = this.get("itemType");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set itemType(value: string) {
+    this.set("itemType", Value.fromString(value));
+  }
+
+  get power(): i32 {
+    let value = this.get("power");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set power(value: i32) {
+    this.set("power", Value.fromI32(value));
+  }
+
+  get durability(): i32 {
+    let value = this.get("durability");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set durability(value: i32) {
+    this.set("durability", Value.fromI32(value));
+  }
+
+  get characterOwner(): string {
+    let value = this.get("characterOwner");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set characterOwner(value: string) {
+    this.set("characterOwner", Value.fromString(value));
   }
 
   get blockNumber(): BigInt {
