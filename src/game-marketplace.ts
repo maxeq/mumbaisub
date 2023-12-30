@@ -58,15 +58,17 @@ export function handleListingCancelled(event: ListingCancelledEvent): void {
 
 export function handlePriceChanged(event: PriceChangedEvent): void {
   let id = event.params.nftAddress.toHexString() + '-' + event.params.tokenId.toString();
-  let entity = new PriceChanged(id);
-  entity.nftAddress = event.params.nftAddress;
-  entity.tokenId = event.params.tokenId;
-  entity.newPrice = event.params.newPrice;
-  entity.blockNumber = event.block.number;
-  entity.blockTimestamp = event.block.timestamp;
+  // Fetch the existing ItemListed entity
+  let entity = ItemListed.load(id);
+  if (entity == null) {
+    // Handle the case where the entity doesn't exist if needed
+    return;
+  }
+  // Update the price of the listed item
+  entity.price = event.params.newPrice;
+  // Save the updated entity
   entity.save();
 }
-
 
 export function handleItemBought(event: ItemBoughtEvent): void {
   let id = event.params.nftAddress.toHexString() + '-' + event.params.tokenId.toString();
