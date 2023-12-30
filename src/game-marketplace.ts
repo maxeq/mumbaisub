@@ -1,5 +1,6 @@
 import { Upgraded as UpgradedEvent, ItemBought as ItemBoughtEvent, ItemListed as ItemListedEvent, PriceChanged as PriceChangedEvent, ListingCancelled as ListingCancelledEvent } from "../generated/GameMarketplace/GameMarketplace"
 import { ItemBought, ItemListed, ListingCancelled, PriceChanged, Upgraded } from "../generated/schema"
+import { store } from '@graphprotocol/graph-ts'
 
 export function handleUpgraded(event: UpgradedEvent): void {
   let entity = new Upgraded(
@@ -41,6 +42,11 @@ export function handleItemListed(event: ItemListedEvent): void {
 
 export function handleListingCancelled(event: ListingCancelledEvent): void {
   let id = event.params.nftAddress.toHexString() + '-' + event.params.tokenId.toString();
+
+  // Remove the ItemListed entity
+  store.remove('ItemListed', id);
+
+  // Create a new ListingCancelled entity (if needed)
   let entity = new ListingCancelled(id);
   entity.nftAddress = event.params.nftAddress;
   entity.tokenId = event.params.tokenId;
@@ -65,6 +71,9 @@ export function handlePriceChanged(event: PriceChangedEvent): void {
 export function handleItemBought(event: ItemBoughtEvent): void {
   let id = event.params.nftAddress.toHexString() + '-' + event.params.tokenId.toString();
   let entity = new ItemBought(id);
+
+  // Remove the ItemListed entity
+  store.remove('ItemListed', id);
 
   entity.nftAddress = event.params.nftAddress;
   entity.tokenId = event.params.tokenId;
