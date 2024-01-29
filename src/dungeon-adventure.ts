@@ -15,6 +15,7 @@ export function handleDungeonResult(event: DungeonResultEvent): void {
   entity.burnedItems = event.params.burnedItems;
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
+  entity.itemPower = event.params.itemPower;
 
   entity.save();
 }

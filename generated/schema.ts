@@ -822,6 +822,19 @@ export class DungeonResult extends Entity {
   set blockTimestamp(value: BigInt) {
     this.set("blockTimestamp", Value.fromBigInt(value));
   }
+
+  get itemPower(): BigInt {
+    let value = this.get("itemPower");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set itemPower(value: BigInt) {
+    this.set("itemPower", Value.fromBigInt(value));
+  }
 }
 
 export class Character extends Entity {

@@ -50,6 +50,10 @@ export class DungeonResult__Params {
   get burnedItems(): Array<BigInt> {
     return this._event.parameters[6].value.toBigIntArray();
   }
+
+  get itemPower(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
+  }
 }
 
 export class Initialized extends ethereum.Event {
@@ -595,6 +599,21 @@ export class DungeonAdventure extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  paymentToken(): Address {
+    let result = super.call("paymentToken", "paymentToken():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_paymentToken(): ethereum.CallResult<Address> {
+    let result = super.tryCall("paymentToken", "paymentToken():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   proxiableUUID(): Bytes {
     let result = super.call("proxiableUUID", "proxiableUUID():(bytes32)", []);
 
@@ -1033,6 +1052,36 @@ export class SetMintItemContractAddressCall__Outputs {
   _call: SetMintItemContractAddressCall;
 
   constructor(call: SetMintItemContractAddressCall) {
+    this._call = call;
+  }
+}
+
+export class SetPaymentTokenCall extends ethereum.Call {
+  get inputs(): SetPaymentTokenCall__Inputs {
+    return new SetPaymentTokenCall__Inputs(this);
+  }
+
+  get outputs(): SetPaymentTokenCall__Outputs {
+    return new SetPaymentTokenCall__Outputs(this);
+  }
+}
+
+export class SetPaymentTokenCall__Inputs {
+  _call: SetPaymentTokenCall;
+
+  constructor(call: SetPaymentTokenCall) {
+    this._call = call;
+  }
+
+  get _tokenAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetPaymentTokenCall__Outputs {
+  _call: SetPaymentTokenCall;
+
+  constructor(call: SetPaymentTokenCall) {
     this._call = call;
   }
 }

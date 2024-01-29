@@ -63,6 +63,7 @@ type DungeonResult @entity {
   burnedItems: [BigInt!]!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
+  itemPower: BigInt!
 }
 
 type Character @entity {
