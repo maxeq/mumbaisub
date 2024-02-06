@@ -34,7 +34,7 @@ dataSources:
     name: DungeonAdventure
     network: mumbai
     source:
-      address: "0xBe02808F1D40A2fa87Fbe8405818b63fD2d0A02E"
+      address: "0x4eB3e2bDeE0b64c34Df247d4193AfAfBf5B242fD"
       abi: DungeonAdventure
       startBlock: 43757245
     mapping:

@@ -152,6 +152,24 @@ export class RoleRevoked__Params {
   }
 }
 
+export class SignatureReceived extends ethereum.Event {
+  get params(): SignatureReceived__Params {
+    return new SignatureReceived__Params(this);
+  }
+}
+
+export class SignatureReceived__Params {
+  _event: SignatureReceived;
+
+  constructor(event: SignatureReceived) {
+    this._event = event;
+  }
+
+  get signature(): Bytes {
+    return this._event.parameters[0].value.toBytes();
+  }
+}
+
 export class Upgraded extends ethereum.Event {
   get params(): Upgraded__Params {
     return new Upgraded__Params(this);
@@ -209,6 +227,14 @@ export class DungeonAdventure__attemptDetailsResultParamsStruct extends ethereum
 
   get lootReward(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get timestamp(): BigInt {
+    return this[10].toBigInt();
+  }
+
+  get signature(): Bytes {
+    return this[11].toBytes();
   }
 }
 
@@ -394,7 +420,7 @@ export class DungeonAdventure extends ethereum.SmartContract {
   attemptDetails(param0: BigInt): DungeonAdventure__attemptDetailsResult {
     let result = super.call(
       "attemptDetails",
-      "attemptDetails(uint256):(uint256,address,uint256,(uint256[],uint256,uint16,uint256[],uint256,uint256,address,uint256,uint256,uint256),bool)",
+      "attemptDetails(uint256):(uint256,address,uint256,(uint256[],uint256,uint16,uint256[],uint256,uint256,address,uint256,uint256,uint256,uint256,bytes),bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)],
     );
 
@@ -414,7 +440,7 @@ export class DungeonAdventure extends ethereum.SmartContract {
   ): ethereum.CallResult<DungeonAdventure__attemptDetailsResult> {
     let result = super.tryCall(
       "attemptDetails",
-      "attemptDetails(uint256):(uint256,address,uint256,(uint256[],uint256,uint16,uint256[],uint256,uint256,address,uint256,uint256,uint256),bool)",
+      "attemptDetails(uint256):(uint256,address,uint256,(uint256[],uint256,uint16,uint256[],uint256,uint256,address,uint256,uint256,uint256,uint256,bytes),bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)],
     );
     if (result.reverted) {
@@ -592,6 +618,29 @@ export class DungeonAdventure extends ethereum.SmartContract {
 
   try_itemContract(): ethereum.CallResult<Address> {
     let result = super.tryCall("itemContract", "itemContract():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  knownServerAddress(): Address {
+    let result = super.call(
+      "knownServerAddress",
+      "knownServerAddress():(address)",
+      [],
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_knownServerAddress(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "knownServerAddress",
+      "knownServerAddress():(address)",
+      [],
+    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -777,6 +826,14 @@ export class GoDungeonCallParamsStruct extends ethereum.Tuple {
 
   get lootReward(): BigInt {
     return this[9].toBigInt();
+  }
+
+  get timestamp(): BigInt {
+    return this[10].toBigInt();
+  }
+
+  get signature(): Bytes {
+    return this[11].toBytes();
   }
 }
 
@@ -1022,6 +1079,36 @@ export class SetGameTreasuryAddressCall__Outputs {
   _call: SetGameTreasuryAddressCall;
 
   constructor(call: SetGameTreasuryAddressCall) {
+    this._call = call;
+  }
+}
+
+export class SetKnownServerAddressCall extends ethereum.Call {
+  get inputs(): SetKnownServerAddressCall__Inputs {
+    return new SetKnownServerAddressCall__Inputs(this);
+  }
+
+  get outputs(): SetKnownServerAddressCall__Outputs {
+    return new SetKnownServerAddressCall__Outputs(this);
+  }
+}
+
+export class SetKnownServerAddressCall__Inputs {
+  _call: SetKnownServerAddressCall;
+
+  constructor(call: SetKnownServerAddressCall) {
+    this._call = call;
+  }
+
+  get _knownServerAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetKnownServerAddressCall__Outputs {
+  _call: SetKnownServerAddressCall;
+
+  constructor(call: SetKnownServerAddressCall) {
     this._call = call;
   }
 }
