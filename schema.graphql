@@ -72,6 +72,21 @@ type DungeonResult @entity {
   openSlots: [BigInt!]! # Assuming this is an array of BigInt
 }
 
+type CharacterDailySummary @entity {
+  id: ID!
+  id_day: String!
+  dungeonDate: BigInt!
+  characterCreationDate: BigInt!
+  characterId: BigInt!
+  dungeonTimestamp: BigInt!
+  totalLootReward: BigInt!
+  totalExperiences: BigInt!
+  totalSuccess: BigInt!
+  totalUnsuccess: BigInt!
+  name: String!
+  imageURI: String!
+  experience: BigInt!
+}
 
 type Character @entity {
   id: ID!

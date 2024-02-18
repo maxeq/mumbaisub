@@ -911,6 +911,209 @@ export class DungeonResult extends Entity {
   }
 }
 
+export class CharacterDailySummary extends Entity {
+  constructor(id: string) {
+    super();
+    this.set("id", Value.fromString(id));
+  }
+
+  save(): void {
+    let id = this.get("id");
+    assert(
+      id != null,
+      "Cannot save CharacterDailySummary entity without an ID",
+    );
+    if (id) {
+      assert(
+        id.kind == ValueKind.STRING,
+        `Entities of type CharacterDailySummary must have an ID of type String but the id '${id.displayData()}' is of type ${id.displayKind()}`,
+      );
+      store.set("CharacterDailySummary", id.toString(), this);
+    }
+  }
+
+  static loadInBlock(id: string): CharacterDailySummary | null {
+    return changetype<CharacterDailySummary | null>(
+      store.get_in_block("CharacterDailySummary", id),
+    );
+  }
+
+  static load(id: string): CharacterDailySummary | null {
+    return changetype<CharacterDailySummary | null>(
+      store.get("CharacterDailySummary", id),
+    );
+  }
+
+  get id(): string {
+    let value = this.get("id");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id(value: string) {
+    this.set("id", Value.fromString(value));
+  }
+
+  get id_day(): string {
+    let value = this.get("id_day");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set id_day(value: string) {
+    this.set("id_day", Value.fromString(value));
+  }
+
+  get dungeonDate(): BigInt {
+    let value = this.get("dungeonDate");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set dungeonDate(value: BigInt) {
+    this.set("dungeonDate", Value.fromBigInt(value));
+  }
+
+  get characterCreationDate(): BigInt {
+    let value = this.get("characterCreationDate");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set characterCreationDate(value: BigInt) {
+    this.set("characterCreationDate", Value.fromBigInt(value));
+  }
+
+  get characterId(): BigInt {
+    let value = this.get("characterId");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set characterId(value: BigInt) {
+    this.set("characterId", Value.fromBigInt(value));
+  }
+
+  get dungeonTimestamp(): BigInt {
+    let value = this.get("dungeonTimestamp");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set dungeonTimestamp(value: BigInt) {
+    this.set("dungeonTimestamp", Value.fromBigInt(value));
+  }
+
+  get totalLootReward(): BigInt {
+    let value = this.get("totalLootReward");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalLootReward(value: BigInt) {
+    this.set("totalLootReward", Value.fromBigInt(value));
+  }
+
+  get totalExperiences(): BigInt {
+    let value = this.get("totalExperiences");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalExperiences(value: BigInt) {
+    this.set("totalExperiences", Value.fromBigInt(value));
+  }
+
+  get totalSuccess(): BigInt {
+    let value = this.get("totalSuccess");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalSuccess(value: BigInt) {
+    this.set("totalSuccess", Value.fromBigInt(value));
+  }
+
+  get totalUnsuccess(): BigInt {
+    let value = this.get("totalUnsuccess");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set totalUnsuccess(value: BigInt) {
+    this.set("totalUnsuccess", Value.fromBigInt(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get imageURI(): string {
+    let value = this.get("imageURI");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set imageURI(value: string) {
+    this.set("imageURI", Value.fromString(value));
+  }
+
+  get experience(): BigInt {
+    let value = this.get("experience");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set experience(value: BigInt) {
+    this.set("experience", Value.fromBigInt(value));
+  }
+}
+
 export class Character extends Entity {
   constructor(id: string) {
     super();
