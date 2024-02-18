@@ -1,22 +1,11 @@
 import { DungeonResult as DungeonResultEvent } from "../generated/DungeonAdventure/DungeonAdventure";
-import { Character, DungeonResult } from "../generated/schema";
+import { DungeonResult } from "../generated/schema";
 
 export function handleDungeonResult(event: DungeonResultEvent): void {
   let id = event.transaction.hash.toHex() + "-" + event.logIndex.toString();
   let entity = new DungeonResult(id);
 
-  let characterId = event.params.characterId.toString();
-  let character = Character.load(characterId);
-  if (character === null) {
-    // Обработка случая, если персонаж еще не был создан
-    character = new Character(characterId);
-    // Установите начальные значения для персонажа, если необходимо
-    character.save();
-  }
-
-  entity.name = character.name;
-  entity.experience = character.experience;
-  
+  // Set the properties of the entity based on the event parameters
   entity.player = event.params.player;
   entity.characterId = event.params.characterId;
   entity.success = event.params.success;
@@ -29,6 +18,10 @@ export function handleDungeonResult(event: DungeonResultEvent): void {
   entity.characterCreationDate = event.params.characterCreationDate;
   entity.lootReward = event.params.lootReward;
   entity.dungeonTimestamp = event.params.dungeonTimestamp;
+  entity.name = event.params.name;
+  entity.imageURI = event.params.imageURI;
+  entity.experience = event.params.experience;
+  entity.openSlots = event.params.openSlots;
 
   entity.save();
 }

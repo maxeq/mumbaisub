@@ -47,7 +47,7 @@ dataSources:
         - name: DungeonAdventure
           file: ./abis/DungeonAdventure.json
       eventHandlers:
-        - event: DungeonResult(indexed address,uint256,bool,string,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)
+        - event: DungeonResult(indexed address,uint256,bool,string,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256,string,string,uint256,uint256[])
           handler: handleDungeonResult
       file: ./src/dungeon-adventure.ts
   - kind: ethereum

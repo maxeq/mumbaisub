@@ -662,8 +662,6 @@ export class ItemBought extends Entity {
 }
 
 export class DungeonResult extends Entity {
-  name: string;
-  experience: BigInt;
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
@@ -743,21 +741,17 @@ export class DungeonResult extends Entity {
     this.set("success", Value.fromBoolean(value));
   }
 
-  get message(): string | null {
+  get message(): string {
     let value = this.get("message");
     if (!value || value.kind == ValueKind.NULL) {
-      return null;
+      throw new Error("Cannot return null for a required field.");
     } else {
       return value.toString();
     }
   }
 
-  set message(value: string | null) {
-    if (!value) {
-      this.unset("message");
-    } else {
-      this.set("message", Value.fromString(<string>value));
-    }
+  set message(value: string) {
+    this.set("message", Value.fromString(value));
   }
 
   get winChance(): BigInt {
@@ -862,6 +856,58 @@ export class DungeonResult extends Entity {
 
   set dungeonTimestamp(value: BigInt) {
     this.set("dungeonTimestamp", Value.fromBigInt(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
+  }
+
+  get imageURI(): string {
+    let value = this.get("imageURI");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set imageURI(value: string) {
+    this.set("imageURI", Value.fromString(value));
+  }
+
+  get experience(): BigInt {
+    let value = this.get("experience");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set experience(value: BigInt) {
+    this.set("experience", Value.fromBigInt(value));
+  }
+
+  get openSlots(): Array<BigInt> {
+    let value = this.get("openSlots");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigIntArray();
+    }
+  }
+
+  set openSlots(value: Array<BigInt>) {
+    this.set("openSlots", Value.fromBigIntArray(value));
   }
 }
 

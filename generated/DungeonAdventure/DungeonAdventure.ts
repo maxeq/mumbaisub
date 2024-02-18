@@ -70,6 +70,22 @@ export class DungeonResult__Params {
   get dungeonTimestamp(): BigInt {
     return this._event.parameters[11].value.toBigInt();
   }
+
+  get name(): string {
+    return this._event.parameters[12].value.toString();
+  }
+
+  get imageURI(): string {
+    return this._event.parameters[13].value.toString();
+  }
+
+  get experience(): BigInt {
+    return this._event.parameters[14].value.toBigInt();
+  }
+
+  get openSlots(): Array<BigInt> {
+    return this._event.parameters[15].value.toBigIntArray();
+  }
 }
 
 export class Initialized extends ethereum.Event {
