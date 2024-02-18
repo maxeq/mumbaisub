@@ -663,6 +663,7 @@ export class ItemBought extends Entity {
 
 export class DungeonResult extends Entity {
   name: string;
+  experience: BigInt;
   constructor(id: string) {
     super();
     this.set("id", Value.fromString(id));
