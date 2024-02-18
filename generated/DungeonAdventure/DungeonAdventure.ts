@@ -54,6 +54,22 @@ export class DungeonResult__Params {
   get itemPower(): BigInt {
     return this._event.parameters[7].value.toBigInt();
   }
+
+  get randomNormalized(): BigInt {
+    return this._event.parameters[8].value.toBigInt();
+  }
+
+  get characterCreationDate(): BigInt {
+    return this._event.parameters[9].value.toBigInt();
+  }
+
+  get lootReward(): BigInt {
+    return this._event.parameters[10].value.toBigInt();
+  }
+
+  get dungeonTimestamp(): BigInt {
+    return this._event.parameters[11].value.toBigInt();
+  }
 }
 
 export class Initialized extends ethereum.Event {
@@ -74,81 +90,25 @@ export class Initialized__Params {
   }
 }
 
-export class RoleAdminChanged extends ethereum.Event {
-  get params(): RoleAdminChanged__Params {
-    return new RoleAdminChanged__Params(this);
+export class OwnershipTransferred extends ethereum.Event {
+  get params(): OwnershipTransferred__Params {
+    return new OwnershipTransferred__Params(this);
   }
 }
 
-export class RoleAdminChanged__Params {
-  _event: RoleAdminChanged;
+export class OwnershipTransferred__Params {
+  _event: OwnershipTransferred;
 
-  constructor(event: RoleAdminChanged) {
+  constructor(event: OwnershipTransferred) {
     this._event = event;
   }
 
-  get role(): Bytes {
-    return this._event.parameters[0].value.toBytes();
+  get previousOwner(): Address {
+    return this._event.parameters[0].value.toAddress();
   }
 
-  get previousAdminRole(): Bytes {
-    return this._event.parameters[1].value.toBytes();
-  }
-
-  get newAdminRole(): Bytes {
-    return this._event.parameters[2].value.toBytes();
-  }
-}
-
-export class RoleGranted extends ethereum.Event {
-  get params(): RoleGranted__Params {
-    return new RoleGranted__Params(this);
-  }
-}
-
-export class RoleGranted__Params {
-  _event: RoleGranted;
-
-  constructor(event: RoleGranted) {
-    this._event = event;
-  }
-
-  get role(): Bytes {
-    return this._event.parameters[0].value.toBytes();
-  }
-
-  get account(): Address {
+  get newOwner(): Address {
     return this._event.parameters[1].value.toAddress();
-  }
-
-  get sender(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class RoleRevoked extends ethereum.Event {
-  get params(): RoleRevoked__Params {
-    return new RoleRevoked__Params(this);
-  }
-}
-
-export class RoleRevoked__Params {
-  _event: RoleRevoked;
-
-  constructor(event: RoleRevoked) {
-    this._event = event;
-  }
-
-  get role(): Bytes {
-    return this._event.parameters[0].value.toBytes();
-  }
-
-  get account(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get sender(): Address {
-    return this._event.parameters[2].value.toAddress();
   }
 }
 
@@ -236,6 +196,10 @@ export class DungeonAdventure__attemptDetailsResultParamsStruct extends ethereum
   get signature(): Bytes {
     return this[11].toBytes();
   }
+
+  get starRating(): i32 {
+    return this[12].toI32();
+  }
 }
 
 export class DungeonAdventure__attemptDetailsResult {
@@ -290,108 +254,9 @@ export class DungeonAdventure__attemptDetailsResult {
   }
 }
 
-export class DungeonAdventure__dungeonAttemptsResult {
-  value0: BigInt;
-  value1: BigInt;
-  value2: boolean;
-  value3: BigInt;
-
-  constructor(value0: BigInt, value1: BigInt, value2: boolean, value3: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-    this.value2 = value2;
-    this.value3 = value3;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromUnsignedBigInt(this.value0));
-    map.set("value1", ethereum.Value.fromUnsignedBigInt(this.value1));
-    map.set("value2", ethereum.Value.fromBoolean(this.value2));
-    map.set("value3", ethereum.Value.fromUnsignedBigInt(this.value3));
-    return map;
-  }
-
-  getTimestamp(): BigInt {
-    return this.value0;
-  }
-
-  getWinChance(): BigInt {
-    return this.value1;
-  }
-
-  getSuccess(): boolean {
-    return this.value2;
-  }
-
-  getRandomValue(): BigInt {
-    return this.value3;
-  }
-}
-
-export class DungeonAdventure__getDungeonAttemptDetailsResultValue0Struct extends ethereum.Tuple {
-  get timestamp(): BigInt {
-    return this[0].toBigInt();
-  }
-
-  get winChance(): BigInt {
-    return this[1].toBigInt();
-  }
-
-  get success(): boolean {
-    return this[2].toBoolean();
-  }
-
-  get randomValue(): BigInt {
-    return this[3].toBigInt();
-  }
-}
-
 export class DungeonAdventure extends ethereum.SmartContract {
   static bind(address: Address): DungeonAdventure {
     return new DungeonAdventure("DungeonAdventure", address);
-  }
-
-  DEFAULT_ADMIN_ROLE(): Bytes {
-    let result = super.call(
-      "DEFAULT_ADMIN_ROLE",
-      "DEFAULT_ADMIN_ROLE():(bytes32)",
-      [],
-    );
-
-    return result[0].toBytes();
-  }
-
-  try_DEFAULT_ADMIN_ROLE(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "DEFAULT_ADMIN_ROLE",
-      "DEFAULT_ADMIN_ROLE():(bytes32)",
-      [],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  UPGRADER_ROLE(): Bytes {
-    let result = super.call("UPGRADER_ROLE", "UPGRADER_ROLE():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_UPGRADER_ROLE(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "UPGRADER_ROLE",
-      "UPGRADER_ROLE():(bytes32)",
-      [],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
   UPGRADE_INTERFACE_VERSION(): string {
@@ -420,7 +285,7 @@ export class DungeonAdventure extends ethereum.SmartContract {
   attemptDetails(param0: BigInt): DungeonAdventure__attemptDetailsResult {
     let result = super.call(
       "attemptDetails",
-      "attemptDetails(uint256):(uint256,address,uint256,(uint256[],uint256,uint16,uint256[],uint256,uint256,address,uint256,uint256,uint256,uint256,bytes),bool)",
+      "attemptDetails(uint256):(uint256,address,uint256,(uint256[],uint256,uint16,uint256[],uint256,uint256,address,uint256,uint256,uint256,uint256,bytes,uint8),bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)],
     );
 
@@ -440,7 +305,7 @@ export class DungeonAdventure extends ethereum.SmartContract {
   ): ethereum.CallResult<DungeonAdventure__attemptDetailsResult> {
     let result = super.tryCall(
       "attemptDetails",
-      "attemptDetails(uint256):(uint256,address,uint256,(uint256[],uint256,uint16,uint256[],uint256,uint256,address,uint256,uint256,uint256,uint256,bytes),bool)",
+      "attemptDetails(uint256):(uint256,address,uint256,(uint256[],uint256,uint16,uint256[],uint256,uint256,address,uint256,uint256,uint256,uint256,bytes,uint8),bool)",
       [ethereum.Value.fromUnsignedBigInt(param0)],
     );
     if (result.reverted) {
@@ -483,43 +348,6 @@ export class DungeonAdventure extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  dungeonAttempts(param0: Address): DungeonAdventure__dungeonAttemptsResult {
-    let result = super.call(
-      "dungeonAttempts",
-      "dungeonAttempts(address):(uint256,uint256,bool,uint256)",
-      [ethereum.Value.fromAddress(param0)],
-    );
-
-    return new DungeonAdventure__dungeonAttemptsResult(
-      result[0].toBigInt(),
-      result[1].toBigInt(),
-      result[2].toBoolean(),
-      result[3].toBigInt(),
-    );
-  }
-
-  try_dungeonAttempts(
-    param0: Address,
-  ): ethereum.CallResult<DungeonAdventure__dungeonAttemptsResult> {
-    let result = super.tryCall(
-      "dungeonAttempts",
-      "dungeonAttempts(address):(uint256,uint256,bool,uint256)",
-      [ethereum.Value.fromAddress(param0)],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new DungeonAdventure__dungeonAttemptsResult(
-        value[0].toBigInt(),
-        value[1].toBigInt(),
-        value[2].toBoolean(),
-        value[3].toBigInt(),
-      ),
-    );
-  }
-
   gameTreasury(): Address {
     let result = super.call("gameTreasury", "gameTreasury():(address)", []);
 
@@ -535,79 +363,52 @@ export class DungeonAdventure extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getDungeonAttemptDetails(
-    player: Address,
-  ): DungeonAdventure__getDungeonAttemptDetailsResultValue0Struct {
+  getCharacterEnergy(characterId: BigInt): BigInt {
     let result = super.call(
-      "getDungeonAttemptDetails",
-      "getDungeonAttemptDetails(address):((uint256,uint256,bool,uint256))",
-      [ethereum.Value.fromAddress(player)],
+      "getCharacterEnergy",
+      "getCharacterEnergy(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(characterId)],
     );
 
-    return changetype<DungeonAdventure__getDungeonAttemptDetailsResultValue0Struct>(
-      result[0].toTuple(),
-    );
+    return result[0].toBigInt();
   }
 
-  try_getDungeonAttemptDetails(
-    player: Address,
-  ): ethereum.CallResult<DungeonAdventure__getDungeonAttemptDetailsResultValue0Struct> {
+  try_getCharacterEnergy(characterId: BigInt): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "getDungeonAttemptDetails",
-      "getDungeonAttemptDetails(address):((uint256,uint256,bool,uint256))",
-      [ethereum.Value.fromAddress(player)],
+      "getCharacterEnergy",
+      "getCharacterEnergy(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(characterId)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(
-      changetype<DungeonAdventure__getDungeonAttemptDetailsResultValue0Struct>(
-        value[0].toTuple(),
-      ),
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getLastEnergyUpdateTime(characterId: BigInt): BigInt {
+    let result = super.call(
+      "getLastEnergyUpdateTime",
+      "getLastEnergyUpdateTime(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(characterId)],
     );
+
+    return result[0].toBigInt();
   }
 
-  getRoleAdmin(role: Bytes): Bytes {
-    let result = super.call("getRoleAdmin", "getRoleAdmin(bytes32):(bytes32)", [
-      ethereum.Value.fromFixedBytes(role),
-    ]);
-
-    return result[0].toBytes();
-  }
-
-  try_getRoleAdmin(role: Bytes): ethereum.CallResult<Bytes> {
+  try_getLastEnergyUpdateTime(
+    characterId: BigInt,
+  ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
-      "getRoleAdmin",
-      "getRoleAdmin(bytes32):(bytes32)",
-      [ethereum.Value.fromFixedBytes(role)],
+      "getLastEnergyUpdateTime",
+      "getLastEnergyUpdateTime(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(characterId)],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  hasRole(role: Bytes, account: Address): boolean {
-    let result = super.call("hasRole", "hasRole(bytes32,address):(bool)", [
-      ethereum.Value.fromFixedBytes(role),
-      ethereum.Value.fromAddress(account),
-    ]);
-
-    return result[0].toBoolean();
-  }
-
-  try_hasRole(role: Bytes, account: Address): ethereum.CallResult<boolean> {
-    let result = super.tryCall("hasRole", "hasRole(bytes32,address):(bool)", [
-      ethereum.Value.fromFixedBytes(role),
-      ethereum.Value.fromAddress(account),
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   itemContract(): Address {
@@ -641,6 +442,21 @@ export class DungeonAdventure extends ethereum.SmartContract {
       "knownServerAddress():(address)",
       [],
     );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  owner(): Address {
+    let result = super.call("owner", "owner():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_owner(): ethereum.CallResult<Address> {
+    let result = super.tryCall("owner", "owner():(address)", []);
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -705,27 +521,27 @@ export class DungeonAdventure extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  supportsInterface(interfaceId: Bytes): boolean {
+  tournamentContract(): Address {
     let result = super.call(
-      "supportsInterface",
-      "supportsInterface(bytes4):(bool)",
-      [ethereum.Value.fromFixedBytes(interfaceId)],
+      "tournamentContract",
+      "tournamentContract():(address)",
+      [],
     );
 
-    return result[0].toBoolean();
+    return result[0].toAddress();
   }
 
-  try_supportsInterface(interfaceId: Bytes): ethereum.CallResult<boolean> {
+  try_tournamentContract(): ethereum.CallResult<Address> {
     let result = super.tryCall(
-      "supportsInterface",
-      "supportsInterface(bytes4):(bool)",
-      [ethereum.Value.fromFixedBytes(interfaceId)],
+      "tournamentContract",
+      "tournamentContract():(address)",
+      [],
     );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 }
 
@@ -835,39 +651,9 @@ export class GoDungeonCallParamsStruct extends ethereum.Tuple {
   get signature(): Bytes {
     return this[11].toBytes();
   }
-}
 
-export class GrantRoleCall extends ethereum.Call {
-  get inputs(): GrantRoleCall__Inputs {
-    return new GrantRoleCall__Inputs(this);
-  }
-
-  get outputs(): GrantRoleCall__Outputs {
-    return new GrantRoleCall__Outputs(this);
-  }
-}
-
-export class GrantRoleCall__Inputs {
-  _call: GrantRoleCall;
-
-  constructor(call: GrantRoleCall) {
-    this._call = call;
-  }
-
-  get role(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
-  }
-
-  get account(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-}
-
-export class GrantRoleCall__Outputs {
-  _call: GrantRoleCall;
-
-  constructor(call: GrantRoleCall) {
-    this._call = call;
+  get starRating(): i32 {
+    return this[12].toI32();
   }
 }
 
@@ -888,28 +674,36 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get defaultAdmin(): Address {
+  get initialOwner(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get upgrader(): Address {
+  get _itemContractAddress(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get _itemContractAddress(): Address {
+  get _characterContractAddress(): Address {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get _characterContractAddress(): Address {
+  get _randomnessProvider(): Address {
     return this._call.inputValues[3].value.toAddress();
   }
 
-  get _randomnessProvider(): Address {
+  get _gameTreasuryAddress(): Address {
     return this._call.inputValues[4].value.toAddress();
   }
 
-  get _gameTreasuryAddress(): Address {
+  get _knownServerAddress(): Address {
     return this._call.inputValues[5].value.toAddress();
+  }
+
+  get _paymentToken(): Address {
+    return this._call.inputValues[6].value.toAddress();
+  }
+
+  get _tournamentContract(): Address {
+    return this._call.inputValues[7].value.toAddress();
   }
 }
 
@@ -955,70 +749,28 @@ export class ProcessDungeonAttemptCall__Outputs {
   }
 }
 
-export class RenounceRoleCall extends ethereum.Call {
-  get inputs(): RenounceRoleCall__Inputs {
-    return new RenounceRoleCall__Inputs(this);
+export class RenounceOwnershipCall extends ethereum.Call {
+  get inputs(): RenounceOwnershipCall__Inputs {
+    return new RenounceOwnershipCall__Inputs(this);
   }
 
-  get outputs(): RenounceRoleCall__Outputs {
-    return new RenounceRoleCall__Outputs(this);
-  }
-}
-
-export class RenounceRoleCall__Inputs {
-  _call: RenounceRoleCall;
-
-  constructor(call: RenounceRoleCall) {
-    this._call = call;
-  }
-
-  get role(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
-  }
-
-  get callerConfirmation(): Address {
-    return this._call.inputValues[1].value.toAddress();
+  get outputs(): RenounceOwnershipCall__Outputs {
+    return new RenounceOwnershipCall__Outputs(this);
   }
 }
 
-export class RenounceRoleCall__Outputs {
-  _call: RenounceRoleCall;
+export class RenounceOwnershipCall__Inputs {
+  _call: RenounceOwnershipCall;
 
-  constructor(call: RenounceRoleCall) {
+  constructor(call: RenounceOwnershipCall) {
     this._call = call;
   }
 }
 
-export class RevokeRoleCall extends ethereum.Call {
-  get inputs(): RevokeRoleCall__Inputs {
-    return new RevokeRoleCall__Inputs(this);
-  }
+export class RenounceOwnershipCall__Outputs {
+  _call: RenounceOwnershipCall;
 
-  get outputs(): RevokeRoleCall__Outputs {
-    return new RevokeRoleCall__Outputs(this);
-  }
-}
-
-export class RevokeRoleCall__Inputs {
-  _call: RevokeRoleCall;
-
-  constructor(call: RevokeRoleCall) {
-    this._call = call;
-  }
-
-  get role(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
-  }
-
-  get account(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-}
-
-export class RevokeRoleCall__Outputs {
-  _call: RevokeRoleCall;
-
-  constructor(call: RevokeRoleCall) {
+  constructor(call: RenounceOwnershipCall) {
     this._call = call;
   }
 }
@@ -1199,6 +951,36 @@ export class SetRandomnessProviderCall__Outputs {
   _call: SetRandomnessProviderCall;
 
   constructor(call: SetRandomnessProviderCall) {
+    this._call = call;
+  }
+}
+
+export class TransferOwnershipCall extends ethereum.Call {
+  get inputs(): TransferOwnershipCall__Inputs {
+    return new TransferOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): TransferOwnershipCall__Outputs {
+    return new TransferOwnershipCall__Outputs(this);
+  }
+}
+
+export class TransferOwnershipCall__Inputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+
+  get newOwner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class TransferOwnershipCall__Outputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
     this._call = call;
   }
 }

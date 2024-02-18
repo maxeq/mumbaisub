@@ -8,6 +8,8 @@ export function handleCharacterMinted(event: CharacterMintedEvent): void {
   entity.tokenId = event.params.tokenId;
   entity.name = event.params.name;
   entity.imageURI = event.params.imageURI;
+  entity.avatarType = event.params.avatarType;
+  entity.registrationDate = event.params.registrationDate;
 
   // Assign a default value for itemSlots if it is null
   entity.itemSlots = event.params.itemSlots ? event.params.itemSlots : BigInt.fromI32(0);

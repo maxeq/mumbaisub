@@ -1,10 +1,15 @@
-import { CharacterOwnerChanged as CharacterOwnerChangedEvent } from "../generated/MintItem/MintItem";
-import { ItemOwnershipChange } from "../generated/schema";
+import { ForgeProcessed as ForgeProcessedEvent } from "../generated/MintItem/MintItem";
+import { ForgeProcessed } from "../generated/schema";
 
-export function handleCharacterOwnerChanged(event: CharacterOwnerChangedEvent): void {
-  let id = event.params.tokenId.toString();
-  let entity = new ItemOwnershipChange(id);
-  entity.tokenId = event.params.tokenId;
-  entity.newOwner = event.params.newOwner;
+export function handleForgeProcessed(event: ForgeProcessedEvent): void {
+  let entity = new ForgeProcessed(event.transaction.hash.toHex() + "-" + event.logIndex.toString());
+  entity.user = event.params.user;
+  entity.itemId = event.params.itemId;
+  entity.uri = event.params.uri;
+  entity.successPercentage = event.params.successPercentage;
+  entity.random = event.params.random;
+
+  entity.mintedAt = event.block.timestamp;
+
   entity.save();
 }

@@ -6,8 +6,7 @@ export function handleBoxMinted(event: BoxMintedEvent): void {
   let entity = new Box(id);
   entity.user = event.params.user;
   entity.tokenId = event.params.tokenId;
-  entity.name = event.params.name;
-  entity.itemType = event.params.itemType;
+  entity.mintedAt = event.block.timestamp;
   entity.save();
 }
 
@@ -25,7 +24,7 @@ export function handleItemsProcessed(event: ItemsProcessedEvent): void {
     item.user = event.params.user;
     item.tokenId = itemIds[i];
     item.metadata = uris[i];
-
+    item.mintedAt = event.block.timestamp;
     item.save();
   }
 }

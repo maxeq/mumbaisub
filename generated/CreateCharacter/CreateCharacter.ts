@@ -113,8 +113,16 @@ export class CharacterMinted__Params {
     return this._event.parameters[3].value.toString();
   }
 
+  get avatarType(): string {
+    return this._event.parameters[4].value.toString();
+  }
+
   get itemSlots(): BigInt {
-    return this._event.parameters[4].value.toBigInt();
+    return this._event.parameters[5].value.toBigInt();
+  }
+
+  get registrationDate(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
   }
 }
 
@@ -309,17 +317,20 @@ export class CreateCharacter__getCharacterMetadataResult {
   value1: string;
   value2: BigInt;
   value3: Array<BigInt>;
+  value4: BigInt;
 
   constructor(
     value0: string,
     value1: string,
     value2: BigInt,
     value3: Array<BigInt>,
+    value4: BigInt,
   ) {
     this.value0 = value0;
     this.value1 = value1;
     this.value2 = value2;
     this.value3 = value3;
+    this.value4 = value4;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -328,6 +339,7 @@ export class CreateCharacter__getCharacterMetadataResult {
     map.set("value1", ethereum.Value.fromString(this.value1));
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     map.set("value3", ethereum.Value.fromUnsignedBigIntArray(this.value3));
+    map.set("value4", ethereum.Value.fromUnsignedBigInt(this.value4));
     return map;
   }
 
@@ -346,6 +358,10 @@ export class CreateCharacter__getCharacterMetadataResult {
   getValue3(): Array<BigInt> {
     return this.value3;
   }
+
+  getValue4(): BigInt {
+    return this.value4;
+  }
 }
 
 export class CreateCharacter__getCharactersByOwnerResultValue0Struct extends ethereum.Tuple {
@@ -361,12 +377,54 @@ export class CreateCharacter__getCharactersByOwnerResultValue0Struct extends eth
     return this[2].toString();
   }
 
+  get avatarType(): string {
+    return this[3].toString();
+  }
+
   get experience(): BigInt {
-    return this[3].toBigInt();
+    return this[4].toBigInt();
   }
 
   get openSlots(): Array<BigInt> {
-    return this[4].toBigIntArray();
+    return this[5].toBigIntArray();
+  }
+
+  get energy(): BigInt {
+    return this[6].toBigInt();
+  }
+
+  get lastEnergyUpdateTime(): BigInt {
+    return this[7].toBigInt();
+  }
+}
+
+export class CreateCharacter__mintCharacterInputParamsStruct extends ethereum.Tuple {
+  get to(): Address {
+    return this[0].toAddress();
+  }
+
+  get name(): string {
+    return this[1].toString();
+  }
+
+  get imageURI(): string {
+    return this[2].toString();
+  }
+
+  get avatarType(): string {
+    return this[3].toString();
+  }
+
+  get tokenAmount(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get signature(): Bytes {
+    return this[5].toBytes();
+  }
+
+  get timestamp(): BigInt {
+    return this[6].toBigInt();
   }
 }
 
@@ -417,6 +475,29 @@ export class CreateCharacter extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  dungeonAdventure(): Address {
+    let result = super.call(
+      "dungeonAdventure",
+      "dungeonAdventure():(address)",
+      [],
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_dungeonAdventure(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "dungeonAdventure",
+      "dungeonAdventure():(address)",
+      [],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
   gameTreasury(): Address {
     let result = super.call("gameTreasury", "gameTreasury():(address)", []);
 
@@ -453,12 +534,35 @@ export class CreateCharacter extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  getCharacterExp(tokenId: BigInt): BigInt {
+    let result = super.call(
+      "getCharacterExp",
+      "getCharacterExp(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getCharacterExp(tokenId: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getCharacterExp",
+      "getCharacterExp(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   getCharacterMetadata(
     tokenId: BigInt,
   ): CreateCharacter__getCharacterMetadataResult {
     let result = super.call(
       "getCharacterMetadata",
-      "getCharacterMetadata(uint256):(string,string,uint256,uint256[])",
+      "getCharacterMetadata(uint256):(string,string,uint256,uint256[],uint256)",
       [ethereum.Value.fromUnsignedBigInt(tokenId)],
     );
 
@@ -467,6 +571,7 @@ export class CreateCharacter extends ethereum.SmartContract {
       result[1].toString(),
       result[2].toBigInt(),
       result[3].toBigIntArray(),
+      result[4].toBigInt(),
     );
   }
 
@@ -475,7 +580,7 @@ export class CreateCharacter extends ethereum.SmartContract {
   ): ethereum.CallResult<CreateCharacter__getCharacterMetadataResult> {
     let result = super.tryCall(
       "getCharacterMetadata",
-      "getCharacterMetadata(uint256):(string,string,uint256,uint256[])",
+      "getCharacterMetadata(uint256):(string,string,uint256,uint256[],uint256)",
       [ethereum.Value.fromUnsignedBigInt(tokenId)],
     );
     if (result.reverted) {
@@ -488,6 +593,7 @@ export class CreateCharacter extends ethereum.SmartContract {
         value[1].toString(),
         value[2].toBigInt(),
         value[3].toBigIntArray(),
+        value[4].toBigInt(),
       ),
     );
   }
@@ -497,7 +603,7 @@ export class CreateCharacter extends ethereum.SmartContract {
   ): Array<CreateCharacter__getCharactersByOwnerResultValue0Struct> {
     let result = super.call(
       "getCharactersByOwner",
-      "getCharactersByOwner(address):((uint256,string,string,uint256,uint256[])[])",
+      "getCharactersByOwner(address):((uint256,string,string,string,uint256,uint256[],uint256,uint256)[])",
       [ethereum.Value.fromAddress(owner)],
     );
 
@@ -511,7 +617,7 @@ export class CreateCharacter extends ethereum.SmartContract {
   > {
     let result = super.tryCall(
       "getCharactersByOwner",
-      "getCharactersByOwner(address):((uint256,string,string,uint256,uint256[])[])",
+      "getCharactersByOwner(address):((uint256,string,string,string,uint256,uint256[],uint256,uint256)[])",
       [ethereum.Value.fromAddress(owner)],
     );
     if (result.reverted) {
@@ -521,6 +627,50 @@ export class CreateCharacter extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(
       value[0].toTupleArray<CreateCharacter__getCharactersByOwnerResultValue0Struct>(),
     );
+  }
+
+  getRegistrationDate(tokenId: BigInt): BigInt {
+    let result = super.call(
+      "getRegistrationDate",
+      "getRegistrationDate(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_getRegistrationDate(tokenId: BigInt): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getRegistrationDate",
+      "getRegistrationDate(uint256):(uint256)",
+      [ethereum.Value.fromUnsignedBigInt(tokenId)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getTypeCount(_type: string): BigInt {
+    let result = super.call("getTypeCount", "getTypeCount(string):(uint256)", [
+      ethereum.Value.fromString(_type),
+    ]);
+
+    return result[0].toBigInt();
+  }
+
+  try_getTypeCount(_type: string): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "getTypeCount",
+      "getTypeCount(string):(uint256)",
+      [ethereum.Value.fromString(_type)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   isApprovedForAll(owner: Address, operator: Address): boolean {
@@ -547,6 +697,33 @@ export class CreateCharacter extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  mintCharacter(
+    params: CreateCharacter__mintCharacterInputParamsStruct,
+  ): BigInt {
+    let result = super.call(
+      "mintCharacter",
+      "mintCharacter((address,string,string,string,uint256,bytes,uint256)):(uint256)",
+      [ethereum.Value.fromTuple(params)],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_mintCharacter(
+    params: CreateCharacter__mintCharacterInputParamsStruct,
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "mintCharacter",
+      "mintCharacter((address,string,string,string,uint256,bytes,uint256)):(uint256)",
+      [ethereum.Value.fromTuple(params)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   name(): string {
@@ -611,6 +788,21 @@ export class CreateCharacter extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  paymentToken(): Address {
+    let result = super.call("paymentToken", "paymentToken():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_paymentToken(): ethereum.CallResult<Address> {
+    let result = super.tryCall("paymentToken", "paymentToken():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   proxiableUUID(): Bytes {
@@ -818,6 +1010,56 @@ export class ApproveCall__Outputs {
   }
 }
 
+export class BurnCharacterForRewardCall extends ethereum.Call {
+  get inputs(): BurnCharacterForRewardCall__Inputs {
+    return new BurnCharacterForRewardCall__Inputs(this);
+  }
+
+  get outputs(): BurnCharacterForRewardCall__Outputs {
+    return new BurnCharacterForRewardCall__Outputs(this);
+  }
+}
+
+export class BurnCharacterForRewardCall__Inputs {
+  _call: BurnCharacterForRewardCall;
+
+  constructor(call: BurnCharacterForRewardCall) {
+    this._call = call;
+  }
+
+  get params(): BurnCharacterForRewardCallParamsStruct {
+    return changetype<BurnCharacterForRewardCallParamsStruct>(
+      this._call.inputValues[0].value.toTuple(),
+    );
+  }
+}
+
+export class BurnCharacterForRewardCall__Outputs {
+  _call: BurnCharacterForRewardCall;
+
+  constructor(call: BurnCharacterForRewardCall) {
+    this._call = call;
+  }
+}
+
+export class BurnCharacterForRewardCallParamsStruct extends ethereum.Tuple {
+  get tokenId(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get rewardAmount(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get timestamp(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get signature(): Bytes {
+    return this[3].toBytes();
+  }
+}
+
 export class InitializeCall extends ethereum.Call {
   get inputs(): InitializeCall__Inputs {
     return new InitializeCall__Inputs(this);
@@ -841,6 +1083,18 @@ export class InitializeCall__Inputs {
 
   get _gameTreasuryAddress(): Address {
     return this._call.inputValues[1].value.toAddress();
+  }
+
+  get _authorizedSinger(): Address {
+    return this._call.inputValues[2].value.toAddress();
+  }
+
+  get _dungeonAdventureAddress(): Address {
+    return this._call.inputValues[3].value.toAddress();
+  }
+
+  get _paymentToken(): Address {
+    return this._call.inputValues[4].value.toAddress();
   }
 }
 
@@ -869,16 +1123,10 @@ export class MintCharacterCall__Inputs {
     this._call = call;
   }
 
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get name(): string {
-    return this._call.inputValues[1].value.toString();
-  }
-
-  get imageURI(): string {
-    return this._call.inputValues[2].value.toString();
+  get params(): MintCharacterCallParamsStruct {
+    return changetype<MintCharacterCallParamsStruct>(
+      this._call.inputValues[0].value.toTuple(),
+    );
   }
 }
 
@@ -891,6 +1139,36 @@ export class MintCharacterCall__Outputs {
 
   get value0(): BigInt {
     return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class MintCharacterCallParamsStruct extends ethereum.Tuple {
+  get to(): Address {
+    return this[0].toAddress();
+  }
+
+  get name(): string {
+    return this[1].toString();
+  }
+
+  get imageURI(): string {
+    return this[2].toString();
+  }
+
+  get avatarType(): string {
+    return this[3].toString();
+  }
+
+  get tokenAmount(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get signature(): Bytes {
+    return this[5].toBytes();
+  }
+
+  get timestamp(): BigInt {
+    return this[6].toBigInt();
   }
 }
 
@@ -1094,6 +1372,66 @@ export class SetApprovalForAllCall__Outputs {
   }
 }
 
+export class SetAuthorizedSignerCall extends ethereum.Call {
+  get inputs(): SetAuthorizedSignerCall__Inputs {
+    return new SetAuthorizedSignerCall__Inputs(this);
+  }
+
+  get outputs(): SetAuthorizedSignerCall__Outputs {
+    return new SetAuthorizedSignerCall__Outputs(this);
+  }
+}
+
+export class SetAuthorizedSignerCall__Inputs {
+  _call: SetAuthorizedSignerCall;
+
+  constructor(call: SetAuthorizedSignerCall) {
+    this._call = call;
+  }
+
+  get _authorizedSigner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetAuthorizedSignerCall__Outputs {
+  _call: SetAuthorizedSignerCall;
+
+  constructor(call: SetAuthorizedSignerCall) {
+    this._call = call;
+  }
+}
+
+export class SetDungeonAdventureAddressCall extends ethereum.Call {
+  get inputs(): SetDungeonAdventureAddressCall__Inputs {
+    return new SetDungeonAdventureAddressCall__Inputs(this);
+  }
+
+  get outputs(): SetDungeonAdventureAddressCall__Outputs {
+    return new SetDungeonAdventureAddressCall__Outputs(this);
+  }
+}
+
+export class SetDungeonAdventureAddressCall__Inputs {
+  _call: SetDungeonAdventureAddressCall;
+
+  constructor(call: SetDungeonAdventureAddressCall) {
+    this._call = call;
+  }
+
+  get _dungeonAdventureAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetDungeonAdventureAddressCall__Outputs {
+  _call: SetDungeonAdventureAddressCall;
+
+  constructor(call: SetDungeonAdventureAddressCall) {
+    this._call = call;
+  }
+}
+
 export class SetGameTreasuryAddressCall extends ethereum.Call {
   get inputs(): SetGameTreasuryAddressCall__Inputs {
     return new SetGameTreasuryAddressCall__Inputs(this);
@@ -1120,6 +1458,36 @@ export class SetGameTreasuryAddressCall__Outputs {
   _call: SetGameTreasuryAddressCall;
 
   constructor(call: SetGameTreasuryAddressCall) {
+    this._call = call;
+  }
+}
+
+export class SetPaymentTokenCall extends ethereum.Call {
+  get inputs(): SetPaymentTokenCall__Inputs {
+    return new SetPaymentTokenCall__Inputs(this);
+  }
+
+  get outputs(): SetPaymentTokenCall__Outputs {
+    return new SetPaymentTokenCall__Outputs(this);
+  }
+}
+
+export class SetPaymentTokenCall__Inputs {
+  _call: SetPaymentTokenCall;
+
+  constructor(call: SetPaymentTokenCall) {
+    this._call = call;
+  }
+
+  get _tokenAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetPaymentTokenCall__Outputs {
+  _call: SetPaymentTokenCall;
+
+  constructor(call: SetPaymentTokenCall) {
     this._call = call;
   }
 }

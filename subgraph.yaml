@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0xb1b1e77E6A850758604d32A1e7c7345b540785CB"
       abi: GameMarketplace
-      startBlock: 44088352
+      startBlock: 45614552
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -34,9 +34,9 @@ dataSources:
     name: DungeonAdventure
     network: mumbai
     source:
-      address: "0x4eB3e2bDeE0b64c34Df247d4193AfAfBf5B242fD"
+      address: "0x2343DDF56bf054e79b788a907118EA32224B376D"
       abi: DungeonAdventure
-      startBlock: 43757245
+      startBlock: 45614552
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -47,16 +47,16 @@ dataSources:
         - name: DungeonAdventure
           file: ./abis/DungeonAdventure.json
       eventHandlers:
-        - event: DungeonResult(indexed address,uint256,bool,string,uint256,uint256,uint256[],uint256)
+        - event: DungeonResult(indexed address,uint256,bool,string,uint256,uint256,uint256[],uint256,uint256,uint256,uint256,uint256)
           handler: handleDungeonResult
       file: ./src/dungeon-adventure.ts
   - kind: ethereum
     name: CreateCharacter
     network: mumbai
     source:
-      address: "0x8ae6b96bb0096De4f65BdB8045242329a67485D4"
+      address: "0xcB9d7F02e27D8F1f54CF7dbd96BbD403b71fc2dF"
       abi: CreateCharacter
-      startBlock: 43762903
+      startBlock: 45614552
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -68,7 +68,7 @@ dataSources:
         - name: CreateCharacter
           file: ./abis/CreateCharacter.json
       eventHandlers:
-        - event: CharacterMinted(indexed address,uint256,string,string,uint256)
+        - event: CharacterMinted(indexed address,uint256,string,string,string,uint256,uint256)
           handler: handleCharacterMinted
         - event: ExperienceUpdated(uint256,uint256)
           handler: handleExperienceUpdated
@@ -79,9 +79,9 @@ dataSources:
     name: MintItem
     network: mumbai
     source:
-      address: "0xFEcfd592963095d33A840AfAE11a20B929bb7cAD"
+      address: "0xCAA4b2769a2fD6e6bF8476A049Ca493ad187d102"
       abi: MintItem
-      startBlock: 44000838
+      startBlock: 45614552
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -89,20 +89,21 @@ dataSources:
       entities:
         - Item
         - CharacterOwnerChange
+        - ForgeProcessed
       abis:
         - name: MintItem
           file: ./abis/MintItem.json
       eventHandlers:
-        - event: CharacterOwnerChanged(indexed uint256,indexed address)
-          handler: handleCharacterOwnerChanged
+        - event: ForgeProcessed(indexed address,uint256,string,uint256,uint256)
+          handler: handleForgeProcessed
       file: ./src/mint-item.ts
   - kind: ethereum
     name: MintBox
     network: mumbai
     source:
-      address: "0x7723157B4123bEA28756560aE13dDAe2f1A52F59" # Replace with the actual contract address
+      address: "0x656B1D6f65bBc4AaEa48d242B4820bBDb4bE7FCF" # Replace with the actual contract address
       abi: MintBox
-      startBlock: 43766760
+      startBlock: 45614552
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -114,7 +115,7 @@ dataSources:
         - name: MintBox
           file: ./abis/MintBox.json
       eventHandlers:
-        - event: BoxMinted(indexed address,uint256,string,string)
+        - event: BoxMinted(indexed address,uint256,string)
           handler: handleBoxMinted
         - event: ItemsProcessed(indexed address,uint256[],string[])
           handler: handleItemsProcessed

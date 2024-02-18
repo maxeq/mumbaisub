@@ -105,12 +105,8 @@ export class BoxMinted__Params {
     return this._event.parameters[1].value.toBigInt();
   }
 
-  get name(): string {
+  get itemHash(): string {
     return this._event.parameters[2].value.toString();
-  }
-
-  get itemType(): string {
-    return this._event.parameters[3].value.toString();
   }
 }
 
@@ -176,6 +172,28 @@ export class MetadataUpdate__Params {
   }
 }
 
+export class OwnershipTransferred extends ethereum.Event {
+  get params(): OwnershipTransferred__Params {
+    return new OwnershipTransferred__Params(this);
+  }
+}
+
+export class OwnershipTransferred__Params {
+  _event: OwnershipTransferred;
+
+  constructor(event: OwnershipTransferred) {
+    this._event = event;
+  }
+
+  get previousOwner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newOwner(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
 export class Paused extends ethereum.Event {
   get params(): Paused__Params {
     return new Paused__Params(this);
@@ -191,84 +209,6 @@ export class Paused__Params {
 
   get account(): Address {
     return this._event.parameters[0].value.toAddress();
-  }
-}
-
-export class RoleAdminChanged extends ethereum.Event {
-  get params(): RoleAdminChanged__Params {
-    return new RoleAdminChanged__Params(this);
-  }
-}
-
-export class RoleAdminChanged__Params {
-  _event: RoleAdminChanged;
-
-  constructor(event: RoleAdminChanged) {
-    this._event = event;
-  }
-
-  get role(): Bytes {
-    return this._event.parameters[0].value.toBytes();
-  }
-
-  get previousAdminRole(): Bytes {
-    return this._event.parameters[1].value.toBytes();
-  }
-
-  get newAdminRole(): Bytes {
-    return this._event.parameters[2].value.toBytes();
-  }
-}
-
-export class RoleGranted extends ethereum.Event {
-  get params(): RoleGranted__Params {
-    return new RoleGranted__Params(this);
-  }
-}
-
-export class RoleGranted__Params {
-  _event: RoleGranted;
-
-  constructor(event: RoleGranted) {
-    this._event = event;
-  }
-
-  get role(): Bytes {
-    return this._event.parameters[0].value.toBytes();
-  }
-
-  get account(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get sender(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-}
-
-export class RoleRevoked extends ethereum.Event {
-  get params(): RoleRevoked__Params {
-    return new RoleRevoked__Params(this);
-  }
-}
-
-export class RoleRevoked__Params {
-  _event: RoleRevoked;
-
-  constructor(event: RoleRevoked) {
-    this._event = event;
-  }
-
-  get role(): Bytes {
-    return this._event.parameters[0].value.toBytes();
-  }
-
-  get account(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get sender(): Address {
-    return this._event.parameters[2].value.toAddress();
   }
 }
 
@@ -334,120 +274,60 @@ export class Upgraded__Params {
   }
 }
 
-export class MintBox__getBoxMetadataResult {
-  value0: string;
-  value1: string;
+export class MintBox__getBoxesByOwnerResult {
+  value0: Array<BigInt>;
+  value1: Array<string>;
 
-  constructor(value0: string, value1: string) {
+  constructor(value0: Array<BigInt>, value1: Array<string>) {
     this.value0 = value0;
     this.value1 = value1;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
     let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromString(this.value0));
-    map.set("value1", ethereum.Value.fromString(this.value1));
+    map.set("value0", ethereum.Value.fromUnsignedBigIntArray(this.value0));
+    map.set("value1", ethereum.Value.fromStringArray(this.value1));
     return map;
   }
 
-  getValue0(): string {
+  getValue0(): Array<BigInt> {
     return this.value0;
   }
 
-  getValue1(): string {
+  getValue1(): Array<string> {
     return this.value1;
   }
 }
 
-export class MintBox__getBoxesByOwnerResultValue0Struct extends ethereum.Tuple {
-  get id(): BigInt {
-    return this[0].toBigInt();
+export class MintBox__mintMultipleBoxesInputParamsStruct extends ethereum.Tuple {
+  get to(): Address {
+    return this[0].toAddress();
   }
 
-  get name(): string {
-    return this[1].toString();
+  get ipfsHashes(): Array<string> {
+    return this[1].toStringArray();
   }
 
-  get imageURI(): string {
-    return this[2].toString();
+  get numberOfBoxes(): i32 {
+    return this[2].toI32();
+  }
+
+  get tokenAmount(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get signature(): Bytes {
+    return this[4].toBytes();
+  }
+
+  get timestamp(): BigInt {
+    return this[5].toBigInt();
   }
 }
 
 export class MintBox extends ethereum.SmartContract {
   static bind(address: Address): MintBox {
     return new MintBox("MintBox", address);
-  }
-
-  DEFAULT_ADMIN_ROLE(): Bytes {
-    let result = super.call(
-      "DEFAULT_ADMIN_ROLE",
-      "DEFAULT_ADMIN_ROLE():(bytes32)",
-      [],
-    );
-
-    return result[0].toBytes();
-  }
-
-  try_DEFAULT_ADMIN_ROLE(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "DEFAULT_ADMIN_ROLE",
-      "DEFAULT_ADMIN_ROLE():(bytes32)",
-      [],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  MINTER_ROLE(): Bytes {
-    let result = super.call("MINTER_ROLE", "MINTER_ROLE():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_MINTER_ROLE(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall("MINTER_ROLE", "MINTER_ROLE():(bytes32)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  PAUSER_ROLE(): Bytes {
-    let result = super.call("PAUSER_ROLE", "PAUSER_ROLE():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_PAUSER_ROLE(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall("PAUSER_ROLE", "PAUSER_ROLE():(bytes32)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  UPGRADER_ROLE(): Bytes {
-    let result = super.call("UPGRADER_ROLE", "UPGRADER_ROLE():(bytes32)", []);
-
-    return result[0].toBytes();
-  }
-
-  try_UPGRADER_ROLE(): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "UPGRADER_ROLE",
-      "UPGRADER_ROLE():(bytes32)",
-      [],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
   UPGRADE_INTERFACE_VERSION(): string {
@@ -528,57 +408,25 @@ export class MintBox extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
-  getBoxMetadata(tokenId: BigInt): MintBox__getBoxMetadataResult {
-    let result = super.call(
-      "getBoxMetadata",
-      "getBoxMetadata(uint256):(string,string)",
-      [ethereum.Value.fromUnsignedBigInt(tokenId)],
-    );
-
-    return new MintBox__getBoxMetadataResult(
-      result[0].toString(),
-      result[1].toString(),
-    );
-  }
-
-  try_getBoxMetadata(
-    tokenId: BigInt,
-  ): ethereum.CallResult<MintBox__getBoxMetadataResult> {
-    let result = super.tryCall(
-      "getBoxMetadata",
-      "getBoxMetadata(uint256):(string,string)",
-      [ethereum.Value.fromUnsignedBigInt(tokenId)],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new MintBox__getBoxMetadataResult(
-        value[0].toString(),
-        value[1].toString(),
-      ),
-    );
-  }
-
-  getBoxesByOwner(
-    owner: Address,
-  ): Array<MintBox__getBoxesByOwnerResultValue0Struct> {
+  getBoxesByOwner(owner: Address): MintBox__getBoxesByOwnerResult {
     let result = super.call(
       "getBoxesByOwner",
-      "getBoxesByOwner(address):((uint256,string,string)[])",
+      "getBoxesByOwner(address):(uint256[],string[])",
       [ethereum.Value.fromAddress(owner)],
     );
 
-    return result[0].toTupleArray<MintBox__getBoxesByOwnerResultValue0Struct>();
+    return new MintBox__getBoxesByOwnerResult(
+      result[0].toBigIntArray(),
+      result[1].toStringArray(),
+    );
   }
 
   try_getBoxesByOwner(
     owner: Address,
-  ): ethereum.CallResult<Array<MintBox__getBoxesByOwnerResultValue0Struct>> {
+  ): ethereum.CallResult<MintBox__getBoxesByOwnerResult> {
     let result = super.tryCall(
       "getBoxesByOwner",
-      "getBoxesByOwner(address):((uint256,string,string)[])",
+      "getBoxesByOwner(address):(uint256[],string[])",
       [ethereum.Value.fromAddress(owner)],
     );
     if (result.reverted) {
@@ -586,50 +434,11 @@ export class MintBox extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(
-      value[0].toTupleArray<MintBox__getBoxesByOwnerResultValue0Struct>(),
+      new MintBox__getBoxesByOwnerResult(
+        value[0].toBigIntArray(),
+        value[1].toStringArray(),
+      ),
     );
-  }
-
-  getRoleAdmin(role: Bytes): Bytes {
-    let result = super.call("getRoleAdmin", "getRoleAdmin(bytes32):(bytes32)", [
-      ethereum.Value.fromFixedBytes(role),
-    ]);
-
-    return result[0].toBytes();
-  }
-
-  try_getRoleAdmin(role: Bytes): ethereum.CallResult<Bytes> {
-    let result = super.tryCall(
-      "getRoleAdmin",
-      "getRoleAdmin(bytes32):(bytes32)",
-      [ethereum.Value.fromFixedBytes(role)],
-    );
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBytes());
-  }
-
-  hasRole(role: Bytes, account: Address): boolean {
-    let result = super.call("hasRole", "hasRole(bytes32,address):(bool)", [
-      ethereum.Value.fromFixedBytes(role),
-      ethereum.Value.fromAddress(account),
-    ]);
-
-    return result[0].toBoolean();
-  }
-
-  try_hasRole(role: Bytes, account: Address): ethereum.CallResult<boolean> {
-    let result = super.tryCall("hasRole", "hasRole(bytes32,address):(bool)", [
-      ethereum.Value.fromFixedBytes(role),
-      ethereum.Value.fromAddress(account),
-    ]);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   isApprovedForAll(owner: Address, operator: Address): boolean {
@@ -673,6 +482,33 @@ export class MintBox extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
+  mintMultipleBoxes(
+    params: MintBox__mintMultipleBoxesInputParamsStruct,
+  ): Array<BigInt> {
+    let result = super.call(
+      "mintMultipleBoxes",
+      "mintMultipleBoxes((address,string[],uint8,uint256,bytes,uint256)):(uint256[])",
+      [ethereum.Value.fromTuple(params)],
+    );
+
+    return result[0].toBigIntArray();
+  }
+
+  try_mintMultipleBoxes(
+    params: MintBox__mintMultipleBoxesInputParamsStruct,
+  ): ethereum.CallResult<Array<BigInt>> {
+    let result = super.tryCall(
+      "mintMultipleBoxes",
+      "mintMultipleBoxes((address,string[],uint8,uint256,bytes,uint256)):(uint256[])",
+      [ethereum.Value.fromTuple(params)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigIntArray());
+  }
+
   name(): string {
     let result = super.call("name", "name():(string)", []);
 
@@ -686,6 +522,21 @@ export class MintBox extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toString());
+  }
+
+  owner(): Address {
+    let result = super.call("owner", "owner():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_owner(): ethereum.CallResult<Address> {
+    let result = super.tryCall("owner", "owner():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   ownerOf(tokenId: BigInt): Address {
@@ -720,6 +571,21 @@ export class MintBox extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
+  paymentToken(): Address {
+    let result = super.call("paymentToken", "paymentToken():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_paymentToken(): ethereum.CallResult<Address> {
+    let result = super.tryCall("paymentToken", "paymentToken():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   proxiableUUID(): Bytes {
@@ -957,40 +823,6 @@ export class BurnCall__Outputs {
   }
 }
 
-export class GrantRoleCall extends ethereum.Call {
-  get inputs(): GrantRoleCall__Inputs {
-    return new GrantRoleCall__Inputs(this);
-  }
-
-  get outputs(): GrantRoleCall__Outputs {
-    return new GrantRoleCall__Outputs(this);
-  }
-}
-
-export class GrantRoleCall__Inputs {
-  _call: GrantRoleCall;
-
-  constructor(call: GrantRoleCall) {
-    this._call = call;
-  }
-
-  get role(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
-  }
-
-  get account(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-}
-
-export class GrantRoleCall__Outputs {
-  _call: GrantRoleCall;
-
-  constructor(call: GrantRoleCall) {
-    this._call = call;
-  }
-}
-
 export class InitializeCall extends ethereum.Call {
   get inputs(): InitializeCall__Inputs {
     return new InitializeCall__Inputs(this);
@@ -1008,20 +840,24 @@ export class InitializeCall__Inputs {
     this._call = call;
   }
 
-  get defaultAdmin(): Address {
+  get initialOwner(): Address {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get upgrader(): Address {
+  get _itemContractAddress(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get _itemContractAddress(): Address {
+  get _gameTreasuryAddress(): Address {
     return this._call.inputValues[2].value.toAddress();
   }
 
-  get _gameTreasuryAddress(): Address {
+  get _paymentToken(): Address {
     return this._call.inputValues[3].value.toAddress();
+  }
+
+  get _authorizedSinger(): Address {
+    return this._call.inputValues[4].value.toAddress();
   }
 }
 
@@ -1050,20 +886,10 @@ export class MintMultipleBoxesCall__Inputs {
     this._call = call;
   }
 
-  get to(): Address {
-    return this._call.inputValues[0].value.toAddress();
-  }
-
-  get name(): string {
-    return this._call.inputValues[1].value.toString();
-  }
-
-  get itemType(): string {
-    return this._call.inputValues[2].value.toString();
-  }
-
-  get numberOfBoxes(): BigInt {
-    return this._call.inputValues[3].value.toBigInt();
+  get params(): MintMultipleBoxesCallParamsStruct {
+    return changetype<MintMultipleBoxesCallParamsStruct>(
+      this._call.inputValues[0].value.toTuple(),
+    );
   }
 }
 
@@ -1076,6 +902,32 @@ export class MintMultipleBoxesCall__Outputs {
 
   get value0(): Array<BigInt> {
     return this._call.outputValues[0].value.toBigIntArray();
+  }
+}
+
+export class MintMultipleBoxesCallParamsStruct extends ethereum.Tuple {
+  get to(): Address {
+    return this[0].toAddress();
+  }
+
+  get ipfsHashes(): Array<string> {
+    return this[1].toStringArray();
+  }
+
+  get numberOfBoxes(): i32 {
+    return this[2].toI32();
+  }
+
+  get tokenAmount(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get signature(): Bytes {
+    return this[4].toBytes();
+  }
+
+  get timestamp(): BigInt {
+    return this[5].toBigInt();
   }
 }
 
@@ -1135,70 +987,28 @@ export class PauseCall__Outputs {
   }
 }
 
-export class RenounceRoleCall extends ethereum.Call {
-  get inputs(): RenounceRoleCall__Inputs {
-    return new RenounceRoleCall__Inputs(this);
+export class RenounceOwnershipCall extends ethereum.Call {
+  get inputs(): RenounceOwnershipCall__Inputs {
+    return new RenounceOwnershipCall__Inputs(this);
   }
 
-  get outputs(): RenounceRoleCall__Outputs {
-    return new RenounceRoleCall__Outputs(this);
-  }
-}
-
-export class RenounceRoleCall__Inputs {
-  _call: RenounceRoleCall;
-
-  constructor(call: RenounceRoleCall) {
-    this._call = call;
-  }
-
-  get role(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
-  }
-
-  get callerConfirmation(): Address {
-    return this._call.inputValues[1].value.toAddress();
+  get outputs(): RenounceOwnershipCall__Outputs {
+    return new RenounceOwnershipCall__Outputs(this);
   }
 }
 
-export class RenounceRoleCall__Outputs {
-  _call: RenounceRoleCall;
+export class RenounceOwnershipCall__Inputs {
+  _call: RenounceOwnershipCall;
 
-  constructor(call: RenounceRoleCall) {
+  constructor(call: RenounceOwnershipCall) {
     this._call = call;
   }
 }
 
-export class RevokeRoleCall extends ethereum.Call {
-  get inputs(): RevokeRoleCall__Inputs {
-    return new RevokeRoleCall__Inputs(this);
-  }
+export class RenounceOwnershipCall__Outputs {
+  _call: RenounceOwnershipCall;
 
-  get outputs(): RevokeRoleCall__Outputs {
-    return new RevokeRoleCall__Outputs(this);
-  }
-}
-
-export class RevokeRoleCall__Inputs {
-  _call: RevokeRoleCall;
-
-  constructor(call: RevokeRoleCall) {
-    this._call = call;
-  }
-
-  get role(): Bytes {
-    return this._call.inputValues[0].value.toBytes();
-  }
-
-  get account(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-}
-
-export class RevokeRoleCall__Outputs {
-  _call: RevokeRoleCall;
-
-  constructor(call: RevokeRoleCall) {
+  constructor(call: RenounceOwnershipCall) {
     this._call = call;
   }
 }
@@ -1351,6 +1161,36 @@ export class SetApprovalForAllCall__Outputs {
   }
 }
 
+export class SetAuthorizedSignerCall extends ethereum.Call {
+  get inputs(): SetAuthorizedSignerCall__Inputs {
+    return new SetAuthorizedSignerCall__Inputs(this);
+  }
+
+  get outputs(): SetAuthorizedSignerCall__Outputs {
+    return new SetAuthorizedSignerCall__Outputs(this);
+  }
+}
+
+export class SetAuthorizedSignerCall__Inputs {
+  _call: SetAuthorizedSignerCall;
+
+  constructor(call: SetAuthorizedSignerCall) {
+    this._call = call;
+  }
+
+  get _authorizedSigner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetAuthorizedSignerCall__Outputs {
+  _call: SetAuthorizedSignerCall;
+
+  constructor(call: SetAuthorizedSignerCall) {
+    this._call = call;
+  }
+}
+
 export class SetGameTreasuryAddressCall extends ethereum.Call {
   get inputs(): SetGameTreasuryAddressCall__Inputs {
     return new SetGameTreasuryAddressCall__Inputs(this);
@@ -1411,6 +1251,36 @@ export class SetMintItemContractAddressCall__Outputs {
   }
 }
 
+export class SetPaymentTokenCall extends ethereum.Call {
+  get inputs(): SetPaymentTokenCall__Inputs {
+    return new SetPaymentTokenCall__Inputs(this);
+  }
+
+  get outputs(): SetPaymentTokenCall__Outputs {
+    return new SetPaymentTokenCall__Outputs(this);
+  }
+}
+
+export class SetPaymentTokenCall__Inputs {
+  _call: SetPaymentTokenCall;
+
+  constructor(call: SetPaymentTokenCall) {
+    this._call = call;
+  }
+
+  get _tokenAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetPaymentTokenCall__Outputs {
+  _call: SetPaymentTokenCall;
+
+  constructor(call: SetPaymentTokenCall) {
+    this._call = call;
+  }
+}
+
 export class TransferFromCall extends ethereum.Call {
   get inputs(): TransferFromCall__Inputs {
     return new TransferFromCall__Inputs(this);
@@ -1445,6 +1315,36 @@ export class TransferFromCall__Outputs {
   _call: TransferFromCall;
 
   constructor(call: TransferFromCall) {
+    this._call = call;
+  }
+}
+
+export class TransferOwnershipCall extends ethereum.Call {
+  get inputs(): TransferOwnershipCall__Inputs {
+    return new TransferOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): TransferOwnershipCall__Outputs {
+    return new TransferOwnershipCall__Outputs(this);
+  }
+}
+
+export class TransferOwnershipCall__Inputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+
+  get newOwner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class TransferOwnershipCall__Outputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
     this._call = call;
   }
 }

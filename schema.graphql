@@ -61,20 +61,26 @@ type DungeonResult @entity {
   winChance: BigInt!
   randomValue: BigInt!
   burnedItems: [BigInt!]!
-  blockNumber: BigInt!
-  blockTimestamp: BigInt!
   itemPower: BigInt!
+  randomNormalized: BigInt!
+  characterCreationDate:  BigInt!
+  lootReward: BigInt!
+  dungeonTimestamp: BigInt!
+  character: Character @derivedFrom(field: "dungeonResults")
 }
 
 type Character @entity {
   id: ID!
+  dungeonResults: [DungeonResult!]! @derivedFrom(field: "character")
   user: Bytes!
   tokenId: BigInt!
   name: String!
   imageURI: String!
+  avatarType: String!
   itemSlots: BigInt!
-  experience: BigInt!
   openSlots: [BigInt!]
+  registrationDate: BigInt!
+  experience: BigInt!
 }
 
 type ExperienceUpdate @entity {
@@ -96,9 +102,7 @@ type Box @entity {
   id: ID!
   user: Bytes!
   tokenId: BigInt!
-  name: String!
-  itemType: String!
-  # Additional fields as needed
+  mintedAt: BigInt!
 }
 
 type Item @entity {
@@ -106,7 +110,18 @@ type Item @entity {
   user: Bytes!
   tokenId: BigInt!
   metadata: String!
-  # Additional fields as needed
+  mintedAt: BigInt!
 }
+
+type ForgeProcessed @entity {
+  id: ID!
+  user: Bytes!
+  itemId: BigInt!
+  uri: String!
+  successPercentage: BigInt!
+  random: BigInt!
+  mintedAt: BigInt!
+}
+
 
 
