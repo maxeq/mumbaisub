@@ -55,25 +55,6 @@ type ItemBought @entity {
 type DungeonResult @entity {
   id: ID!
   player: Bytes! # Assuming player is an address
-  characterId: BigInt!
-  success: Boolean!
-  message: String!
-  winChance: BigInt!
-  randomValue: BigInt!
-  burnedItems: [BigInt!]! # Assuming this is an array of BigInt
-  itemPower: BigInt!
-  randomNormalized: BigInt!
-  characterCreationDate: BigInt!
-  lootReward: BigInt!
-  dungeonTimestamp: BigInt!
-  name: String!
-  imageURI: String!
-  experience: BigInt!
-  openSlots: [BigInt!]! # Assuming this is an array of BigInt
-}
-
-type CharacterDailySummary @entity {
-  id: ID!
   id_day: String!
   dungeonDate: BigInt!
   characterCreationDate: BigInt!
@@ -85,7 +66,6 @@ type CharacterDailySummary @entity {
   totalUnsuccess: BigInt!
   name: String!
   imageURI: String!
-  experience: BigInt!
 }
 
 type Character @entity {

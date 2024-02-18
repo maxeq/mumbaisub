@@ -1,67 +1,48 @@
 import { BigInt } from "@graphprotocol/graph-ts";
 import { DungeonResult as DungeonResultEvent } from "../generated/DungeonAdventure/DungeonAdventure";
-import { CharacterDailySummary, DungeonResult } from "../generated/schema";
+import {  DungeonResult } from "../generated/schema";
 
 
 export function handleDungeonResult(event: DungeonResultEvent): void {
   let id = event.transaction.hash.toHex() + "-" + event.logIndex.toString();
-  let entity = DungeonResult.load(id);
-
-  if (!entity) {
-    entity = new DungeonResult(id);
-  }
-
-  // Set the properties of the entity based on the event parameters
-  entity.player = event.params.player;
-  entity.characterId = event.params.characterId;
-  entity.success = event.params.success;
-  entity.message = event.params.message;
-  entity.winChance = event.params.winChance;
-  entity.randomValue = event.params.randomValue;
-  entity.burnedItems = event.params.burnedItems;
-  entity.itemPower = event.params.itemPower;
-  entity.randomNormalized = event.params.randomNormalized;
-  entity.characterCreationDate = event.params.characterCreationDate;
-  entity.lootReward = event.params.lootReward;
-  entity.dungeonTimestamp = event.params.dungeonTimestamp;
-  entity.name = event.params.name;
-  entity.imageURI = event.params.imageURI;
-  entity.experience = event.params.experience;
-  entity.openSlots = event.params.openSlots;
-
-  entity.save();
-  
   let dayMonthYear = dayMonthYearFromEventTimestamp(event);
   let characterId = event.params.characterId.toString();
   let formattedDate = dayMonthYear.year.toString() + "-" + dayMonthYear.month.toString().padStart(2, '0') + "-" + dayMonthYear.day.toString().padStart(2, '0');
   let id_day = characterId + "-" + formattedDate;
 
-  let dailySummary = CharacterDailySummary.load(id_day);
+  let entity = DungeonResult.load(id);
 
-  if (!dailySummary) {
-    dailySummary = new CharacterDailySummary(id_day);
-    dailySummary.characterId = event.params.characterId;
-    dailySummary.dungeonTimestamp = event.params.dungeonTimestamp;
-    dailySummary.totalLootReward = BigInt.fromI32(0);
-    dailySummary.totalExperiences = BigInt.fromI32(0);
-    dailySummary.totalSuccess = BigInt.fromI32(0);
-    dailySummary.totalUnsuccess = BigInt.fromI32(0);
-    dailySummary.name = event.params.name;
-    dailySummary.imageURI = event.params.imageURI;
-    dailySummary.characterCreationDate = event.params.characterCreationDate;
-    dailySummary.dungeonDate = event.block.timestamp;
+  if (!entity) {
+    entity = new DungeonResult(id);
+    entity.player = event.params.player;
+    entity.id_day = id_day;
+    entity.characterId = event.params.characterId;
+    entity.dungeonTimestamp = event.params.dungeonTimestamp;
+    entity.totalLootReward = event.params.lootReward;
+    entity.totalExperiences = event.params.experience;
+    entity.name = event.params.name;
+    entity.imageURI = event.params.imageURI;
+    entity.characterCreationDate = event.params.characterCreationDate;
+    entity.dungeonDate = event.block.timestamp;
+    if (event.params.success) {
+      entity.totalSuccess = BigInt.fromI32(1);
+      entity.totalUnsuccess = BigInt.fromI32(0);
+    } else {
+      entity.totalSuccess = BigInt.fromI32(0);
+      entity.totalUnsuccess = BigInt.fromI32(1);
+    }
   }
 
   if (event.params.success) {
-    dailySummary.totalSuccess = dailySummary.totalSuccess.plus(BigInt.fromI32(1));
-    dailySummary.totalLootReward = dailySummary.totalLootReward.plus(event.params.lootReward);
+    entity.totalSuccess = entity.totalSuccess.plus(BigInt.fromI32(1));
+    entity.totalLootReward = entity.totalLootReward.plus(event.params.lootReward);
   } else {
-    dailySummary.totalUnsuccess = dailySummary.totalUnsuccess.plus(BigInt.fromI32(1));
+    entity.totalUnsuccess = entity.totalUnsuccess.plus(BigInt.fromI32(1));
   }
 
-  dailySummary.totalExperiences = dailySummary.totalExperiences.plus(event.params.experience);
+  entity.totalExperiences = entity.totalExperiences.plus(event.params.experience);
 
-  dailySummary.save();
+  entity.save();
 }
 
 class DayMonthYear {
@@ -81,7 +62,7 @@ const ZERO: BigInt = BigInt.fromI32(0);
 const ONE: BigInt = BigInt.fromI32(1);
 
 export function dayMonthYearFromEventTimestamp(event: DungeonResultEvent ): DayMonthYear {
-  let unixEpoch: BigInt = BigInt.fromI32(event.block.timestamp.toI32()); // Предполагаем, что timestamp уже в секундах
+  let unixEpoch: BigInt = BigInt.fromI32(event.block.timestamp.toI32());
 
   let daysSinceEpochStart: BigInt = unixEpoch.div(BigInt.fromI32(SECONDS_IN_DAY)).plus(BigInt.fromI32(719468));
   
@@ -99,3 +80,29 @@ export function dayMonthYearFromEventTimestamp(event: DungeonResultEvent ): DayM
   
   return new DayMonthYear(day, month, year);
 }
+
+  // let entity = DungeonResult.load(id);
+
+  // if (!entity) {
+  //   entity = new DungeonResult(id);
+  // }
+
+  // // Set the properties of the entity based on the event parameters
+  // entity.player = event.params.player;
+  // entity.characterId = event.params.characterId;
+  // entity.success = event.params.success;
+  // entity.message = event.params.message;
+  // entity.winChance = event.params.winChance;
+  // entity.randomValue = event.params.randomValue;
+  // entity.burnedItems = event.params.burnedItems;
+  // entity.itemPower = event.params.itemPower;
+  // entity.randomNormalized = event.params.randomNormalized;
+  // entity.characterCreationDate = event.params.characterCreationDate;
+  // entity.lootReward = event.params.lootReward;
+  // entity.dungeonTimestamp = event.params.dungeonTimestamp;
+  // entity.name = event.params.name;
+  // entity.imageURI = event.params.imageURI;
+  // entity.experience = event.params.experience;
+  // entity.openSlots = event.params.openSlots;
+
+  // entity.save();

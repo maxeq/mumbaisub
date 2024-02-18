@@ -8,7 +8,7 @@ dataSources:
     source:
       address: "0xb1b1e77E6A850758604d32A1e7c7345b540785CB"
       abi: GameMarketplace
-      startBlock: 45614552
+      startBlock: 46059161
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -36,7 +36,7 @@ dataSources:
     source:
       address: "0x2343DDF56bf054e79b788a907118EA32224B376D"
       abi: DungeonAdventure
-      startBlock: 45614552
+      startBlock:  46059161
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -56,7 +56,7 @@ dataSources:
     source:
       address: "0xcB9d7F02e27D8F1f54CF7dbd96BbD403b71fc2dF"
       abi: CreateCharacter
-      startBlock: 45614552
+      startBlock: 46059161
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -81,7 +81,7 @@ dataSources:
     source:
       address: "0xCAA4b2769a2fD6e6bF8476A049Ca493ad187d102"
       abi: MintItem
-      startBlock: 45614552
+      startBlock: 46059161
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
@@ -103,7 +103,7 @@ dataSources:
     source:
       address: "0x656B1D6f65bBc4AaEa48d242B4820bBDb4bE7FCF" # Replace with the actual contract address
       abi: MintBox
-      startBlock: 45614552
+      startBlock: 46059161
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
