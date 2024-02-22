@@ -17,6 +17,7 @@ type ItemListed @entity {
   power: Int! # Power of the item
   durability: Int! # Durability of the item
   characterOwner: String! # Character owner of the item
+  imageUrl: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
 }
@@ -48,6 +49,7 @@ type ItemBought @entity {
   power: Int! # Power of the item
   durability: Int! # Durability of the item
   characterOwner: String! # Character owner of the item
+  imageUrl: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
 }
@@ -55,17 +57,17 @@ type ItemBought @entity {
 type DungeonResult @entity {
   id: ID!
   player: Bytes! # Assuming player is an address
-  id_day: String!
-  dungeonDate: BigInt!
-  characterCreationDate: BigInt!
+  dungeonTime: String!
+  characterCreationDate: String!
+  dungeonDay: String!
   characterId: BigInt!
-  dungeonTimestamp: BigInt!
   totalLootReward: BigInt!
   totalExperiences: BigInt!
   totalSuccess: BigInt!
-  totalUnsuccess: BigInt!
+  totalAttempts: BigInt!
   name: String!
   imageURI: String!
+  itemPower: BigInt!
 }
 
 type Character @entity {

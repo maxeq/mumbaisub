@@ -261,6 +261,19 @@ export class ItemListed extends Entity {
     this.set("characterOwner", Value.fromString(value));
   }
 
+  get imageUrl(): string {
+    let value = this.get("imageUrl");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set imageUrl(value: string) {
+    this.set("imageUrl", Value.fromString(value));
+  }
+
   get blockNumber(): BigInt {
     let value = this.get("blockNumber");
     if (!value || value.kind == ValueKind.NULL) {
@@ -634,6 +647,19 @@ export class ItemBought extends Entity {
     this.set("characterOwner", Value.fromString(value));
   }
 
+  get imageUrl(): string {
+    let value = this.get("imageUrl");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set imageUrl(value: string) {
+    this.set("imageUrl", Value.fromString(value));
+  }
+
   get blockNumber(): BigInt {
     let value = this.get("blockNumber");
     if (!value || value.kind == ValueKind.NULL) {
@@ -715,8 +741,8 @@ export class DungeonResult extends Entity {
     this.set("player", Value.fromBytes(value));
   }
 
-  get id_day(): string {
-    let value = this.get("id_day");
+  get dungeonTime(): string {
+    let value = this.get("dungeonTime");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
@@ -724,34 +750,34 @@ export class DungeonResult extends Entity {
     }
   }
 
-  set id_day(value: string) {
-    this.set("id_day", Value.fromString(value));
+  set dungeonTime(value: string) {
+    this.set("dungeonTime", Value.fromString(value));
   }
 
-  get dungeonDate(): BigInt {
-    let value = this.get("dungeonDate");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set dungeonDate(value: BigInt) {
-    this.set("dungeonDate", Value.fromBigInt(value));
-  }
-
-  get characterCreationDate(): BigInt {
+  get characterCreationDate(): string {
     let value = this.get("characterCreationDate");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toBigInt();
+      return value.toString();
     }
   }
 
-  set characterCreationDate(value: BigInt) {
-    this.set("characterCreationDate", Value.fromBigInt(value));
+  set characterCreationDate(value: string) {
+    this.set("characterCreationDate", Value.fromString(value));
+  }
+
+  get dungeonDay(): string {
+    let value = this.get("dungeonDay");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set dungeonDay(value: string) {
+    this.set("dungeonDay", Value.fromString(value));
   }
 
   get characterId(): BigInt {
@@ -765,19 +791,6 @@ export class DungeonResult extends Entity {
 
   set characterId(value: BigInt) {
     this.set("characterId", Value.fromBigInt(value));
-  }
-
-  get dungeonTimestamp(): BigInt {
-    let value = this.get("dungeonTimestamp");
-    if (!value || value.kind == ValueKind.NULL) {
-      throw new Error("Cannot return null for a required field.");
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set dungeonTimestamp(value: BigInt) {
-    this.set("dungeonTimestamp", Value.fromBigInt(value));
   }
 
   get totalLootReward(): BigInt {
@@ -819,8 +832,8 @@ export class DungeonResult extends Entity {
     this.set("totalSuccess", Value.fromBigInt(value));
   }
 
-  get totalUnsuccess(): BigInt {
-    let value = this.get("totalUnsuccess");
+  get totalAttempts(): BigInt {
+    let value = this.get("totalAttempts");
     if (!value || value.kind == ValueKind.NULL) {
       throw new Error("Cannot return null for a required field.");
     } else {
@@ -828,8 +841,8 @@ export class DungeonResult extends Entity {
     }
   }
 
-  set totalUnsuccess(value: BigInt) {
-    this.set("totalUnsuccess", Value.fromBigInt(value));
+  set totalAttempts(value: BigInt) {
+    this.set("totalAttempts", Value.fromBigInt(value));
   }
 
   get name(): string {
@@ -856,6 +869,19 @@ export class DungeonResult extends Entity {
 
   set imageURI(value: string) {
     this.set("imageURI", Value.fromString(value));
+  }
+
+  get itemPower(): BigInt {
+    let value = this.get("itemPower");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toBigInt();
+    }
+  }
+
+  set itemPower(value: BigInt) {
+    this.set("itemPower", Value.fromBigInt(value));
   }
 }
 

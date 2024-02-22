@@ -31,6 +31,7 @@ export function handleItemListed(event: ItemListedEvent): void {
   entity.power = event.params.power;
   entity.durability = event.params.durability;
   entity.characterOwner = event.params.characterOwner;
+  entity.imageUrl = event.params.imageUrl;
 
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;
@@ -87,6 +88,7 @@ export function handleItemBought(event: ItemBoughtEvent): void {
   entity.power = event.params.power;
   entity.durability = event.params.durability;
   entity.characterOwner = event.params.characterOwner;
+  entity.imageUrl = event.params.imageUrl;
 
   entity.blockNumber = event.block.number;
   entity.blockTimestamp = event.block.timestamp;

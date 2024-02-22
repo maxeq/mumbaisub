@@ -76,6 +76,10 @@ export class ItemBought__Params {
   get characterOwner(): string {
     return this._event.parameters[8].value.toString();
   }
+
+  get imageUrl(): string {
+    return this._event.parameters[9].value.toString();
+  }
 }
 
 export class ItemListed extends ethereum.Event {
@@ -125,6 +129,10 @@ export class ItemListed__Params {
 
   get characterOwner(): string {
     return this._event.parameters[8].value.toString();
+  }
+
+  get imageUrl(): string {
+    return this._event.parameters[9].value.toString();
   }
 }
 
@@ -225,6 +233,7 @@ export class GameMarketplace__listingsResult {
   value5: i32;
   value6: i32;
   value7: string;
+  value8: string;
 
   constructor(
     value0: BigInt,
@@ -235,6 +244,7 @@ export class GameMarketplace__listingsResult {
     value5: i32,
     value6: i32,
     value7: string,
+    value8: string,
   ) {
     this.value0 = value0;
     this.value1 = value1;
@@ -244,6 +254,7 @@ export class GameMarketplace__listingsResult {
     this.value5 = value5;
     this.value6 = value6;
     this.value7 = value7;
+    this.value8 = value8;
   }
 
   toMap(): TypedMap<string, ethereum.Value> {
@@ -262,6 +273,7 @@ export class GameMarketplace__listingsResult {
       ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value6)),
     );
     map.set("value7", ethereum.Value.fromString(this.value7));
+    map.set("value8", ethereum.Value.fromString(this.value8));
     return map;
   }
 
@@ -295,6 +307,10 @@ export class GameMarketplace__listingsResult {
 
   getCharacterOwner(): string {
     return this.value7;
+  }
+
+  getImageUrl(): string {
+    return this.value8;
   }
 }
 
@@ -382,7 +398,7 @@ export class GameMarketplace extends ethereum.SmartContract {
   listings(param0: Address, param1: BigInt): GameMarketplace__listingsResult {
     let result = super.call(
       "listings",
-      "listings(address,uint256):(uint256,address,uint256,bool,string,uint16,uint8,string)",
+      "listings(address,uint256):(uint256,address,uint256,bool,string,uint16,uint8,string,string)",
       [
         ethereum.Value.fromAddress(param0),
         ethereum.Value.fromUnsignedBigInt(param1),
@@ -398,6 +414,7 @@ export class GameMarketplace extends ethereum.SmartContract {
       result[5].toI32(),
       result[6].toI32(),
       result[7].toString(),
+      result[8].toString(),
     );
   }
 
@@ -407,7 +424,7 @@ export class GameMarketplace extends ethereum.SmartContract {
   ): ethereum.CallResult<GameMarketplace__listingsResult> {
     let result = super.tryCall(
       "listings",
-      "listings(address,uint256):(uint256,address,uint256,bool,string,uint16,uint8,string)",
+      "listings(address,uint256):(uint256,address,uint256,bool,string,uint16,uint8,string,string)",
       [
         ethereum.Value.fromAddress(param0),
         ethereum.Value.fromUnsignedBigInt(param1),
@@ -427,6 +444,7 @@ export class GameMarketplace extends ethereum.SmartContract {
         value[5].toI32(),
         value[6].toI32(),
         value[7].toString(),
+        value[8].toString(),
       ),
     );
   }
@@ -710,6 +728,10 @@ export class ListItemForSaleCall__Inputs {
 
   get characterOwner(): string {
     return this._call.inputValues[7].value.toString();
+  }
+
+  get imageUrl(): string {
+    return this._call.inputValues[8].value.toString();
   }
 }
 

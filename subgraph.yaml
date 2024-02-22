@@ -21,13 +21,13 @@ dataSources:
       eventHandlers:
         - event: Upgraded(indexed address)
           handler: handleUpgraded
-        - event: ItemListed(indexed address,indexed uint256,address,uint256,uint256[],string,uint16,uint8,string)
+        - event: ItemListed(indexed address,indexed uint256,address,uint256,uint256[],string,uint16,uint8,string,string)
           handler: handleItemListed
         - event: ListingCancelled(indexed address,indexed uint256)
           handler: handleListingCancelled
         - event: PriceChanged(indexed address,indexed uint256,uint256)
           handler: handlePriceChanged
-        - event: ItemBought(indexed address,indexed uint256,address,uint256,uint256[],string,uint16,uint8,string)
+        - event: ItemBought(indexed address,indexed uint256,address,uint256,uint256[],string,uint16,uint8,string,string)
           handler: handleItemBought
       file: ./src/game-marketplace.ts
   - kind: ethereum
