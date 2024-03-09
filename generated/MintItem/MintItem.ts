@@ -116,6 +116,10 @@ export class ForgeProcessed__Params {
   get random(): BigInt {
     return this._event.parameters[4].value.toBigInt();
   }
+
+  get functionName(): string {
+    return this._event.parameters[5].value.toString();
+  }
 }
 
 export class Initialized extends ethereum.Event {
@@ -221,6 +225,48 @@ export class Upgraded__Params {
 }
 
 export class MintItem__forgeItemInputParamsStruct extends ethereum.Tuple {
+  get to(): Address {
+    return this[0].toAddress();
+  }
+
+  get tokenAmount(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get itemId1(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get itemId2(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get newItemPowerRange1(): i32 {
+    return this[4].toI32();
+  }
+
+  get newItemPowerRange2(): i32 {
+    return this[5].toI32();
+  }
+
+  get desiredItemType(): string {
+    return this[6].toString();
+  }
+
+  get successPercentage(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get timestamp(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get signature(): Bytes {
+    return this[9].toBytes();
+  }
+}
+
+export class MintItem__forgeSameValueItemInputParamsStruct extends ethereum.Tuple {
   get to(): Address {
     return this[0].toAddress();
   }
@@ -485,6 +531,33 @@ export class MintItem extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
+  forgeSameValueItem(
+    params: MintItem__forgeSameValueItemInputParamsStruct,
+  ): BigInt {
+    let result = super.call(
+      "forgeSameValueItem",
+      "forgeSameValueItem((address,uint256,uint256,uint256,uint16,uint16,string,uint256,uint256,bytes)):(uint256)",
+      [ethereum.Value.fromTuple(params)],
+    );
+
+    return result[0].toBigInt();
+  }
+
+  try_forgeSameValueItem(
+    params: MintItem__forgeSameValueItemInputParamsStruct,
+  ): ethereum.CallResult<BigInt> {
+    let result = super.tryCall(
+      "forgeSameValueItem",
+      "forgeSameValueItem((address,uint256,uint256,uint256,uint16,uint16,string,uint256,uint256,bytes)):(uint256)",
+      [ethereum.Value.fromTuple(params)],
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   gameTreasury(): Address {
     let result = super.call("gameTreasury", "gameTreasury():(address)", []);
 
@@ -586,6 +659,25 @@ export class MintItem extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  getItemType(itemId: BigInt): string {
+    let result = super.call("getItemType", "getItemType(uint256):(string)", [
+      ethereum.Value.fromUnsignedBigInt(itemId),
+    ]);
+
+    return result[0].toString();
+  }
+
+  try_getItemType(itemId: BigInt): ethereum.CallResult<string> {
+    let result = super.tryCall("getItemType", "getItemType(uint256):(string)", [
+      ethereum.Value.fromUnsignedBigInt(itemId),
+    ]);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toString());
   }
 
   isApprovedForAll(owner: Address, operator: Address): boolean {
@@ -1221,6 +1313,84 @@ export class ForgeItemCall__Outputs {
 }
 
 export class ForgeItemCallParamsStruct extends ethereum.Tuple {
+  get to(): Address {
+    return this[0].toAddress();
+  }
+
+  get tokenAmount(): BigInt {
+    return this[1].toBigInt();
+  }
+
+  get itemId1(): BigInt {
+    return this[2].toBigInt();
+  }
+
+  get itemId2(): BigInt {
+    return this[3].toBigInt();
+  }
+
+  get newItemPowerRange1(): i32 {
+    return this[4].toI32();
+  }
+
+  get newItemPowerRange2(): i32 {
+    return this[5].toI32();
+  }
+
+  get desiredItemType(): string {
+    return this[6].toString();
+  }
+
+  get successPercentage(): BigInt {
+    return this[7].toBigInt();
+  }
+
+  get timestamp(): BigInt {
+    return this[8].toBigInt();
+  }
+
+  get signature(): Bytes {
+    return this[9].toBytes();
+  }
+}
+
+export class ForgeSameValueItemCall extends ethereum.Call {
+  get inputs(): ForgeSameValueItemCall__Inputs {
+    return new ForgeSameValueItemCall__Inputs(this);
+  }
+
+  get outputs(): ForgeSameValueItemCall__Outputs {
+    return new ForgeSameValueItemCall__Outputs(this);
+  }
+}
+
+export class ForgeSameValueItemCall__Inputs {
+  _call: ForgeSameValueItemCall;
+
+  constructor(call: ForgeSameValueItemCall) {
+    this._call = call;
+  }
+
+  get params(): ForgeSameValueItemCallParamsStruct {
+    return changetype<ForgeSameValueItemCallParamsStruct>(
+      this._call.inputValues[0].value.toTuple(),
+    );
+  }
+}
+
+export class ForgeSameValueItemCall__Outputs {
+  _call: ForgeSameValueItemCall;
+
+  constructor(call: ForgeSameValueItemCall) {
+    this._call = call;
+  }
+
+  get itemId(): BigInt {
+    return this._call.outputValues[0].value.toBigInt();
+  }
+}
+
+export class ForgeSameValueItemCallParamsStruct extends ethereum.Tuple {
   get to(): Address {
     return this[0].toAddress();
   }

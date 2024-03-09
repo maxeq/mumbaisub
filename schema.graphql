@@ -14,8 +14,8 @@ type ItemListed @entity {
   price: BigInt! # Price of the listing
   itemTokenIds: [BigInt!]! # Array of item token IDs
   itemType: String! # Type of the item
-  power: Int! # Power of the item
-  durability: Int! # Durability of the item
+  power: BigInt! # Power of the item
+  durability: BigInt! # Durability of the item
   characterOwner: String! # Character owner of the item
   imageUrl: String!
   blockNumber: BigInt!
@@ -46,8 +46,8 @@ type ItemBought @entity {
   buyer: Bytes! # Address of the buyer
   price: BigInt! # Price at which the item was bought
   itemType: String! # Type of the item
-  power: Int! # Power of the item
-  durability: Int! # Durability of the item
+  power: BigInt! # Power of the item
+  durability: BigInt! # Durability of the item
   characterOwner: String! # Character owner of the item
   imageUrl: String!
   blockNumber: BigInt!

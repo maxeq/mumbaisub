@@ -65,12 +65,12 @@ export class ItemBought__Params {
     return this._event.parameters[5].value.toString();
   }
 
-  get power(): i32 {
-    return this._event.parameters[6].value.toI32();
+  get power(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
   }
 
-  get durability(): i32 {
-    return this._event.parameters[7].value.toI32();
+  get durability(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
   }
 
   get characterOwner(): string {
@@ -119,12 +119,12 @@ export class ItemListed__Params {
     return this._event.parameters[5].value.toString();
   }
 
-  get power(): i32 {
-    return this._event.parameters[6].value.toI32();
+  get power(): BigInt {
+    return this._event.parameters[6].value.toBigInt();
   }
 
-  get durability(): i32 {
-    return this._event.parameters[7].value.toI32();
+  get durability(): BigInt {
+    return this._event.parameters[7].value.toBigInt();
   }
 
   get characterOwner(): string {
@@ -230,8 +230,8 @@ export class GameMarketplace__listingsResult {
   value2: BigInt;
   value3: boolean;
   value4: string;
-  value5: i32;
-  value6: i32;
+  value5: BigInt;
+  value6: BigInt;
   value7: string;
   value8: string;
 
@@ -241,8 +241,8 @@ export class GameMarketplace__listingsResult {
     value2: BigInt,
     value3: boolean,
     value4: string,
-    value5: i32,
-    value6: i32,
+    value5: BigInt,
+    value6: BigInt,
     value7: string,
     value8: string,
   ) {
@@ -264,14 +264,8 @@ export class GameMarketplace__listingsResult {
     map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
     map.set("value3", ethereum.Value.fromBoolean(this.value3));
     map.set("value4", ethereum.Value.fromString(this.value4));
-    map.set(
-      "value5",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value5)),
-    );
-    map.set(
-      "value6",
-      ethereum.Value.fromUnsignedBigInt(BigInt.fromI32(this.value6)),
-    );
+    map.set("value5", ethereum.Value.fromUnsignedBigInt(this.value5));
+    map.set("value6", ethereum.Value.fromUnsignedBigInt(this.value6));
     map.set("value7", ethereum.Value.fromString(this.value7));
     map.set("value8", ethereum.Value.fromString(this.value8));
     return map;
@@ -297,11 +291,11 @@ export class GameMarketplace__listingsResult {
     return this.value4;
   }
 
-  getPower(): i32 {
+  getPower(): BigInt {
     return this.value5;
   }
 
-  getDurability(): i32 {
+  getDurability(): BigInt {
     return this.value6;
   }
 
@@ -398,7 +392,7 @@ export class GameMarketplace extends ethereum.SmartContract {
   listings(param0: Address, param1: BigInt): GameMarketplace__listingsResult {
     let result = super.call(
       "listings",
-      "listings(address,uint256):(uint256,address,uint256,bool,string,uint16,uint8,string,string)",
+      "listings(address,uint256):(uint256,address,uint256,bool,string,uint256,uint256,string,string)",
       [
         ethereum.Value.fromAddress(param0),
         ethereum.Value.fromUnsignedBigInt(param1),
@@ -411,8 +405,8 @@ export class GameMarketplace extends ethereum.SmartContract {
       result[2].toBigInt(),
       result[3].toBoolean(),
       result[4].toString(),
-      result[5].toI32(),
-      result[6].toI32(),
+      result[5].toBigInt(),
+      result[6].toBigInt(),
       result[7].toString(),
       result[8].toString(),
     );
@@ -424,7 +418,7 @@ export class GameMarketplace extends ethereum.SmartContract {
   ): ethereum.CallResult<GameMarketplace__listingsResult> {
     let result = super.tryCall(
       "listings",
-      "listings(address,uint256):(uint256,address,uint256,bool,string,uint16,uint8,string,string)",
+      "listings(address,uint256):(uint256,address,uint256,bool,string,uint256,uint256,string,string)",
       [
         ethereum.Value.fromAddress(param0),
         ethereum.Value.fromUnsignedBigInt(param1),
@@ -441,8 +435,8 @@ export class GameMarketplace extends ethereum.SmartContract {
         value[2].toBigInt(),
         value[3].toBoolean(),
         value[4].toString(),
-        value[5].toI32(),
-        value[6].toI32(),
+        value[5].toBigInt(),
+        value[6].toBigInt(),
         value[7].toString(),
         value[8].toString(),
       ),
@@ -671,6 +665,10 @@ export class InitializeCall__Inputs {
   get _paymentToken(): Address {
     return this._call.inputValues[4].value.toAddress();
   }
+
+  get _authorizedSigner(): Address {
+    return this._call.inputValues[5].value.toAddress();
+  }
 }
 
 export class InitializeCall__Outputs {
@@ -718,12 +716,12 @@ export class ListItemForSaleCall__Inputs {
     return this._call.inputValues[4].value.toString();
   }
 
-  get power(): i32 {
-    return this._call.inputValues[5].value.toI32();
+  get power(): BigInt {
+    return this._call.inputValues[5].value.toBigInt();
   }
 
-  get durability(): i32 {
-    return this._call.inputValues[6].value.toI32();
+  get durability(): BigInt {
+    return this._call.inputValues[6].value.toBigInt();
   }
 
   get characterOwner(): string {
@@ -732,6 +730,10 @@ export class ListItemForSaleCall__Inputs {
 
   get imageUrl(): string {
     return this._call.inputValues[8].value.toString();
+  }
+
+  get signature(): Bytes {
+    return this._call.inputValues[9].value.toBytes();
   }
 }
 
@@ -765,6 +767,36 @@ export class RenounceOwnershipCall__Outputs {
   _call: RenounceOwnershipCall;
 
   constructor(call: RenounceOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class SetAuthorizedSignerCall extends ethereum.Call {
+  get inputs(): SetAuthorizedSignerCall__Inputs {
+    return new SetAuthorizedSignerCall__Inputs(this);
+  }
+
+  get outputs(): SetAuthorizedSignerCall__Outputs {
+    return new SetAuthorizedSignerCall__Outputs(this);
+  }
+}
+
+export class SetAuthorizedSignerCall__Inputs {
+  _call: SetAuthorizedSignerCall;
+
+  constructor(call: SetAuthorizedSignerCall) {
+    this._call = call;
+  }
+
+  get _authorizedSigner(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class SetAuthorizedSignerCall__Outputs {
+  _call: SetAuthorizedSignerCall;
+
+  constructor(call: SetAuthorizedSignerCall) {
     this._call = call;
   }
 }

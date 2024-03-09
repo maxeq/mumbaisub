@@ -222,30 +222,30 @@ export class ItemListed extends Entity {
     this.set("itemType", Value.fromString(value));
   }
 
-  get power(): i32 {
+  get power(): BigInt {
     let value = this.get("power");
     if (!value || value.kind == ValueKind.NULL) {
-      return 0;
+      throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toI32();
+      return value.toBigInt();
     }
   }
 
-  set power(value: i32) {
-    this.set("power", Value.fromI32(value));
+  set power(value: BigInt) {
+    this.set("power", Value.fromBigInt(value));
   }
 
-  get durability(): i32 {
+  get durability(): BigInt {
     let value = this.get("durability");
     if (!value || value.kind == ValueKind.NULL) {
-      return 0;
+      throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toI32();
+      return value.toBigInt();
     }
   }
 
-  set durability(value: i32) {
-    this.set("durability", Value.fromI32(value));
+  set durability(value: BigInt) {
+    this.set("durability", Value.fromBigInt(value));
   }
 
   get characterOwner(): string {
@@ -608,30 +608,30 @@ export class ItemBought extends Entity {
     this.set("itemType", Value.fromString(value));
   }
 
-  get power(): i32 {
+  get power(): BigInt {
     let value = this.get("power");
     if (!value || value.kind == ValueKind.NULL) {
-      return 0;
+      throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toI32();
+      return value.toBigInt();
     }
   }
 
-  set power(value: i32) {
-    this.set("power", Value.fromI32(value));
+  set power(value: BigInt) {
+    this.set("power", Value.fromBigInt(value));
   }
 
-  get durability(): i32 {
+  get durability(): BigInt {
     let value = this.get("durability");
     if (!value || value.kind == ValueKind.NULL) {
-      return 0;
+      throw new Error("Cannot return null for a required field.");
     } else {
-      return value.toI32();
+      return value.toBigInt();
     }
   }
 
-  set durability(value: i32) {
-    this.set("durability", Value.fromI32(value));
+  set durability(value: BigInt) {
+    this.set("durability", Value.fromBigInt(value));
   }
 
   get characterOwner(): string {

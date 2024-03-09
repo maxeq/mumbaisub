@@ -1,14 +1,14 @@
 {
   "mumbai": {
     "GameMarketplace": {
-      "address": "0x932A5Fa6EB8a3BD5A43F5866AbAc30e498197785",
+      "address": "0x664F7A394aB16974c703a8189E48b0092ecB2C06",
       "startBlock": 44088352
     },
     "DungeonAdventure": {
       "address": "0xBe02808F1D40A2fa87Fbe8405818b63fD2d0A02E"
     },
     "MintItem": {
-      "address": "0xFEcfd592963095d33A840AfAE11a20B929bb7cAD"
+      "address": "0x673FE76606a5903f1E2FB1026D3A9EDd844a2F61"
     },
     "MintBox": {
       "address": "0x7723157B4123bEA28756560aE13dDAe2f1A52F59"

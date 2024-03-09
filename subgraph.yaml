@@ -6,7 +6,7 @@ dataSources:
     name: GameMarketplace
     network: mumbai
     source:
-      address: "0xb1b1e77E6A850758604d32A1e7c7345b540785CB"
+      address: "0x664F7A394aB16974c703a8189E48b0092ecB2C06"
       abi: GameMarketplace
       startBlock: 46059161
     mapping:
@@ -21,20 +21,20 @@ dataSources:
       eventHandlers:
         - event: Upgraded(indexed address)
           handler: handleUpgraded
-        - event: ItemListed(indexed address,indexed uint256,address,uint256,uint256[],string,uint16,uint8,string,string)
+        - event: ItemListed(indexed address,indexed uint256,address,uint256,uint256[],string,uint256,uint256,string,string)
           handler: handleItemListed
         - event: ListingCancelled(indexed address,indexed uint256)
           handler: handleListingCancelled
         - event: PriceChanged(indexed address,indexed uint256,uint256)
           handler: handlePriceChanged
-        - event: ItemBought(indexed address,indexed uint256,address,uint256,uint256[],string,uint16,uint8,string,string)
+        - event: ItemBought(indexed address,indexed uint256,address,uint256,uint256[],string,uint256,uint256,string,string)
           handler: handleItemBought
       file: ./src/game-marketplace.ts
   - kind: ethereum
     name: DungeonAdventure
     network: mumbai
     source:
-      address: "0x2343DDF56bf054e79b788a907118EA32224B376D"
+      address: "0xe2132B64e71026f273E98181EC7a95C038A5945D"
       abi: DungeonAdventure
       startBlock:  46059161
     mapping:
@@ -79,7 +79,7 @@ dataSources:
     name: MintItem
     network: mumbai
     source:
-      address: "0xCAA4b2769a2fD6e6bF8476A049Ca493ad187d102"
+      address: "0x673FE76606a5903f1E2FB1026D3A9EDd844a2F61"
       abi: MintItem
       startBlock: 46059161
     mapping:
@@ -94,7 +94,7 @@ dataSources:
         - name: MintItem
           file: ./abis/MintItem.json
       eventHandlers:
-        - event: ForgeProcessed(indexed address,uint256,string,uint256,uint256)
+        - event: ForgeProcessed(indexed address,uint256,string,uint256,uint256,string)
           handler: handleForgeProcessed
       file: ./src/mint-item.ts
   - kind: ethereum
